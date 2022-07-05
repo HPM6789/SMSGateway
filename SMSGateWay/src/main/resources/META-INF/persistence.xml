@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.mycompany_SMSGateWay_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.mycompany.smsgateway.entities.Roles</class>
+    <class>com.mycompany.smsgateway.entities.ClientTps</class>
+    <class>com.mycompany.smsgateway.entities.TypeList</class>
+    <class>com.mycompany.smsgateway.entities.CmdcodeList</class>
+    <class>com.mycompany.smsgateway.entities.ExportCp</class>
+    <class>com.mycompany.smsgateway.entities.NetExportLog</class>
+    <class>com.mycompany.smsgateway.entities.KpiMo</class>
+    <class>com.mycompany.smsgateway.entities.CdrChargeBk</class>
+    <class>com.mycompany.smsgateway.entities.NotifyQueue</class>
+    <class>com.mycompany.smsgateway.entities.CpList</class>
+    <class>com.mycompany.smsgateway.entities.CdrRefundLog</class>
+    <class>com.mycompany.smsgateway.entities.NotifyCp</class>
+    <class>com.mycompany.smsgateway.entities.ActionLog</class>
+    <class>com.mycompany.smsgateway.entities.Groups</class>
+    <class>com.mycompany.smsgateway.entities.CdrChargeLog</class>
+    <class>com.mycompany.smsgateway.entities.ShortcodeCp</class>
+    <class>com.mycompany.smsgateway.entities.ShortcodeList</class>
+    <class>com.mycompany.smsgateway.entities.VCpShortcode</class>
+    <class>com.mycompany.smsgateway.entities.DreportRevenue</class>
+    <class>com.mycompany.smsgateway.entities.ExportLog</class>
+    <class>com.mycompany.smsgateway.entities.SmsMoQueue</class>
+    <class>com.mycompany.smsgateway.entities.ConfigMt</class>
+    <class>com.mycompany.smsgateway.entities.ConfConvertPrefix</class>
+    <class>com.mycompany.smsgateway.entities.AuthUser</class>
+    <class>com.mycompany.smsgateway.entities.CdrRefundBk</class>
+    <class>com.mycompany.smsgateway.entities.OrderDetail</class>
+    <class>com.mycompany.smsgateway.entities.Commentproduct</class>
+    <class>com.mycompany.smsgateway.entities.Feedback</class>
+    <class>com.mycompany.smsgateway.entities.Replyproduct</class>
+    <class>com.mycompany.smsgateway.entities.Products</class>
+    <class>com.mycompany.smsgateway.entities.Orders</class>
+    <class>com.mycompany.smsgateway.entities.Categories</class>
+    <class>com.mycompany.smsgateway.entities.Posts</class>
+    <class>com.mycompany.smsgateway.entities.Users</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.144.13.21:1521:orcl"/>
+      <property name="javax.persistence.jdbc.user" value="smsmo"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.password" value="123456"/>
+    </properties>
+  </persistence-unit>
+</persistence>
