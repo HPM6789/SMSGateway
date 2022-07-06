@@ -92,9 +92,7 @@
                                     <c:forEach var="u" items="${users}">
                                         <tr>
                                             <td>
-                                                <a href="userDetail?username=${u.userName}&page=${page}" style="color: inherit;">
                                                     ${u.userName}
-                                                </a>
                                             </td>
                                             <td>${u.userFullname}</td>
                                             <td>
@@ -109,7 +107,53 @@
                                             <td>${u.userType}</td>
                                             <td>${u.userPhone}</td>
                                             <td>
+                                                <div class="dropdown">
+                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item"
+                                                           href="userDetail?username=${u.userName}&page=${page}"
+                                                           ><i class="bx bx-edit-alt me-1"></i> Sửa</a
+                                                        >
 
+                                                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalTop-${g.id}">
+                                                            <i class="bx bx-trash me-1"></i> Xóa
+                                                        </button>
+                                                    </div>
+                                                    <!-- Modal -->
+                                                    <div class="modal modal-top fade" id="modalTop-${g.id}" tabindex="-1">
+                                                        <div class="modal-dialog">
+                                                            <form class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="modalTopTitle">Xác nhận xóa</h5>
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"
+                                                                        ></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col mb-3">
+                                                                            <h2>Bạn có chắc muốn xóa ${u.userName}</h2>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                                        Đóng
+                                                                    </button>
+                                                                    <a href="#" style="color: inherit; text-decoration: none">
+                                                                        <button type="button" class="btn btn-primary">Xóa</button>
+                                                                    </a>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
