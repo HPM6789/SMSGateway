@@ -63,7 +63,7 @@ public class GroupController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
+        int numPerPage = 5;
         List<GroupsModel> groups = groupDAO.getAllGroups();
         int totalItem = groups.size();
         int endPage = totalItem / numPerPage;
@@ -275,10 +275,33 @@ public class GroupController {
                     "GROUPS", BigInteger.valueOf(idLong), actionResult, "Xóa Nhóm", null, null, request);
         return "redirect:groupList?action=list";
     }
+    
+    @RequestMapping(value = "updateMemberForGroup", method = RequestMethod.GET)
+    public String updateMemberForGroup(Model model, HttpSession session, @RequestParam String groupId,
+            @RequestParam String page) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("GROUP_UPDATE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        Long groupIdLong = Long.parseLong(groupId);
+        List<AuthUserModel> users = authUserDAO.getAllUser();
+        List<String> usernamesInGr = authUserDAO.getUserNamesByGroup(groupIdLong);
+        model.addAttribute("users", users);
+        model.addAttribute("usernamesInGr", usernamesInGr);
+        model.addAttribute("groupId", groupId);
+        model.addAttribute("page", page);
+        return "groupPages_updateMemberForGroup";
+    }
 
     @RequestMapping(value = "updateMemberForGroup", method = RequestMethod.POST)
     public String updateMemberForGroup(Model model, @RequestParam(required = false) List<String> membersId,
-            @RequestParam String groupId, HttpSession session, HttpServletRequest request) {
+            @RequestParam String groupId, HttpSession session, HttpServletRequest request,
+            @RequestParam String page) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -290,7 +313,7 @@ public class GroupController {
         }
         Long groupIdLong = Long.parseLong(groupId);
         List<BigDecimal> userIdInGr = authUserDAO.getUserIdsByGroup(groupIdLong);
-        if (userIdInGr != null && userIdInGr.size() > 0) {
+        if (userIdInGr != null && !userIdInGr.isEmpty()) {
             groupDAO.removeMemberForGroup(groupIdLong, userIdInGr);
         }
         int result = -1;
@@ -311,12 +334,41 @@ public class GroupController {
         actionLogServices.logAction(userSession.getUserId(), "UPDATE_MEMBERS_FOR_GROUP",
                     "GROUPS", BigInteger.valueOf(groupIdLong), actionResult, "Cập nhật thành viên chon nhóm",
                     null, null, request);
-        return "redirect:updateGroup?action=update&id=" + groupId;
+        List<AuthUserModel> users = authUserDAO.getAllUser();
+        List<String> usernamesInGr = authUserDAO.getUserNamesByGroup(groupIdLong);
+        model.addAttribute("users", users);
+        model.addAttribute("usernamesInGr", usernamesInGr);
+        model.addAttribute("groupId", groupId);
+        model.addAttribute("page", page);
+        return "groupPages_updateMemberForGroup";
     }
 
+    @RequestMapping(value = "updateRoleForGroup", method = RequestMethod.GET)
+    public String updateRoleForGroup(Model model, HttpSession session, @RequestParam String groupId,
+            @RequestParam String page) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> rolesSession = (List<String>) session.getAttribute("roleUser");
+        if (!rolesSession.contains("GROUP_UPDATE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        Long groupIdLong = Long.parseLong(groupId);
+        List<RolesModel> roles = rolesDAO.getAllRoles();
+        List<String> rolenames = rolesDAO.getRoleNamesByGroupId(groupIdLong);
+        model.addAttribute("roles", roles);
+        model.addAttribute("rolenames", rolenames);
+        model.addAttribute("groupId", groupId);
+        model.addAttribute("page", page);
+        return "groupPages_updateRoleForGroup";
+    }
+    
     @RequestMapping(value = "updateRoleForGroup", method = RequestMethod.POST)
     public String updateRoleForGroup(Model model, HttpSession session, @RequestParam String groupId,
-            @RequestParam(required = false) List<String> rolesId, HttpServletRequest request) {
+            @RequestParam(required = false) List<String> rolesId, HttpServletRequest request,
+            @RequestParam String page) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -348,6 +400,12 @@ public class GroupController {
         actionLogServices.logAction(userSession.getUserId(), "UPDATE_ROLES_FOR_GROUP",
                     "GROUPS", BigInteger.valueOf(groupIdLong), actionResult, "Cập nhật quyền chon nhóm",
                     null, null, request);
-        return "redirect:updateGroup?action=update&id=" + groupId;
+        List<RolesModel> roles = rolesDAO.getAllRoles();
+        List<String> rolenames = rolesDAO.getRoleNamesByGroupId(groupIdLong);
+        model.addAttribute("roles", roles);
+        model.addAttribute("rolenames", rolenames);
+        model.addAttribute("groupId", groupId);
+        model.addAttribute("page", page);
+        return "groupPages_updateRoleForGroup";
     }
 }

@@ -112,10 +112,18 @@
                                             </td>
                                             <td>${g.description}</td>
                                             <td>
-                                                <fmt:formatDate value="${g.createTime}" pattern="dd/MM/yyyy HH:mm:ss"/>
+                                                <a href="updateMemberForGroup?groupId=${g.id}&page=${page}" style="color: inherit; text-decoration: none">
+                                                    <button class="btn btn-primary me-2">
+                                                        Cập Nhật Thành Viên
+                                                    </button>
+                                                </a>
                                             </td>
                                             <td>
-                                                <fmt:formatDate value="${g.updateTime}" pattern="dd/MM/yyyy HH:mm:ss"/>
+                                                <a href="updateRoleForGroup?groupId=${g.id}&page=${page}" style="color: inherit; text-decoration: none">
+                                                    <button class="btn btn-primary me-2">
+                                                        Gán Quyền
+                                                    </button>
+                                                </a>
                                             </td>
                                             <td>
                                                 <div class="dropdown">

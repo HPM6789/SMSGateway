@@ -183,7 +183,7 @@
                                                                     <select id="selectMemberMultiple" name="membersId" multiple class="selectpicker"
                                                                             data-live-search="true" data-actions-box="true">
                                                                             <c:forEach var="u" items="${users}">
-                                                                                    <option <c:if test="${usernames.contains(u.userName)}">selected="</c:if>" value="${u.userId}">
+                                                                                    <option <c:if test="${usernames.contains(u.userName)}">selected=""</c:if> value="${u.userId}">
                                                                                         ${u.userFullname}
                                                                                     </option>
                                                                             </c:forEach>
