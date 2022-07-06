@@ -223,7 +223,7 @@ public class AuthUserDAOImpl implements AuthUserDAO {
     }
 
     @Override
-    public List<AuthUserModel> getUserByOption(String inputSearch, BigInteger status) {
+    public List<AuthUserModel> getUserByOption(String inputSearch, BigInteger status, BigInteger userType) {
         String sql = "select new " + AuthUserModel.class.getName()
                 + "(a.userId, a.userName, a.userPass, a.userFullname, a.userDesc, a.userStatus, "
                 + "a.userIsSuper, a.userType, a.userAddr, a.userPhone, a.userEmail, "
@@ -238,6 +238,9 @@ public class AuthUserDAOImpl implements AuthUserDAO {
         }
         if (status != null) {
             sql += " and a.userStatus = " + status;
+        }
+        if (userType != null) {
+            sql += " and a.userType = " + userType;
         }
         sql += " order by a.userCreatedtime desc";
         try {

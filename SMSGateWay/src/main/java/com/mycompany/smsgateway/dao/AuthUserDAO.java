@@ -41,7 +41,7 @@ public interface AuthUserDAO {
     //Search user by username, email
     public List<AuthUserModel> getUserByUsernameOrEmail(String usernameOrEmail);
     
-    public List<AuthUserModel> getUserByOption(String inputSearch, BigInteger status);
+    public List<AuthUserModel> getUserByOption(String inputSearch, BigInteger status, BigInteger userType);
     
     public AuthUserModel getUserWithCP(String username);
     

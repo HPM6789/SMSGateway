@@ -65,7 +65,7 @@
                 <%@include file="sidebar.jsp" %>
                 <div class="layout-page">
                     <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
-                        <form action="searchUser" method="get" style="" name="searchUserForm">
+                        <form action="searchUser" method="get" style="" name="" id="formSearch">
                             <div class="row">
                                 <div class="mb-3 col-md-4">
                                     <input type="hidden" name="action" value="search"/>
@@ -76,17 +76,31 @@
                                     <label class="form-label" for="basic-default-status">Trạng Thái</label>
                                 </div>
                                 <div class="mb-3 col-md-4">
-                                    <input type="radio"  id="basic-default-active" name="status" value="1" class="form-check-input"
-                                    <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
-                                    <input type="radio"  id="basic-default-inactive" name="status" value="0" class="form-check-input"
-                                    <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Không hoạt động
+                                    <input type="radio"  id="radioStatus1" name="status" value="1" class="form-check-input"
+                                           <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
+                                           <input type="radio"  id="radioStatus0" name="status" value="0" class="form-check-input"
+                                           <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Không hoạt động
+                                    </div>
+                                    <div class="mb-3 col-md-2">
+                                        <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                                    </div>
+                                    <div class="mb-3 col-md-1"  style="text-align: right">
+                                        <label class="form-label" for="basic-default-status">Loại</label>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <input type="radio"  id="radioType1" name="userType" value="1" class="form-check-input"
+                                        <c:if test="${userType == 1}">checked=""</c:if>/>&nbsp;CP&nbsp;&nbsp;
+                                        <input type="radio"  id="radioType0" name="userType" value="0" class="form-check-input"
+                                        <c:if test="${userType == 0}">checked=""</c:if>/>&nbsp;Chưa xác nhận&nbsp;&nbsp;
+                                        <input type="radio"  id="radioType2" name="userType" value="2" class="form-check-input"
+                                        <c:if test="${userType == 2}">checked=""</c:if>/>&nbsp;VNP
+                                    </div>
+                                    <div class="mb-3 col-md-1">
+                                        <button class="btn btn-secondary" onclick="resetFormSearch()">Reset</button>
+                                    </div>
                                 </div>
-                                <div class="mb-3 col-md-2">
-                                    <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                            </form>
+                        </div>
                         <!-- Bootstrap Table with Header - Light -->
                         <div class="card">
                             <h5 class="card-header">Danh sách người dùng</h5>
@@ -112,14 +126,24 @@
                                             <td>${u.userFullname}</td>
                                             <td>
                                                 <c:if test="${u.userStatus == 1}">
-                                                    Active
+                                                    Hoạt động
                                                 </c:if>
                                                 <c:if test="${u.userStatus == 0}">
-                                                    Inactive
+                                                    Không hoạt động
                                                 </c:if>
                                             </td>
                                             <td>${u.userEmail}</td>
-                                            <td>${u.userType}</td>
+                                            <td>
+                                                <c:if test="${u.userType == 0}">
+                                                    Chưa xác nhận
+                                                </c:if>
+                                                <c:if test="${u.userType == 1}">
+                                                    CP
+                                                </c:if>
+                                                <c:if test="${u.userType == 2}">
+                                                    VNP
+                                                </c:if>
+                                            </td>
                                             <td>${u.userPhone}</td>
                                             <td>
                                                 <div class="dropdown">
@@ -281,7 +305,16 @@
                 $('#table1').DataTable();
             });
         </script>
-
+        <script>
+            function resetFormSearch() {
+                document.getElementById("formSearch").reset();  
+                document.getElementById("radioType0").checked = false;
+                document.getElementById("radioType1").checked = false;
+                document.getElementById("radioType2").checked = false;
+                document.getElementById("radioStatus0").checked = false;
+                document.getElementById("radioStatus1").checked = false;
+            }
+        </script>
         <style>
             .dataTables_filter, .dataTables_info {
                 display: none;

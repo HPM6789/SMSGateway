@@ -96,7 +96,7 @@ public class AuthUserController {
     @RequestMapping(value = "/searchUser", method = RequestMethod.GET)
     public String userList(Model model, @RequestParam(required = false) String inputSearch, HttpSession session,
             @RequestParam(required = false) String page, @RequestParam String action, 
-            @RequestParam(required = false) String status) {
+            @RequestParam(required = false) String status, @RequestParam(required = false) String userType) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -112,10 +112,14 @@ public class AuthUserController {
         int pageInt = Integer.parseInt(page);
         int numPerPage = 10;
         BigInteger statusInt = null;
+        BigInteger userTypeInt = null;
         if (status != null) {
             statusInt = new BigInteger(status);
         }
-        List<AuthUserModel> users = authUserDAO.getUserByOption(inputSearch, statusInt);
+        if( userType !=null) {
+            userTypeInt = new BigInteger(userType);
+        }
+        List<AuthUserModel> users = authUserDAO.getUserByOption(inputSearch, statusInt, userTypeInt);
         int totalItem = users.size();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
@@ -134,6 +138,8 @@ public class AuthUserController {
         model.addAttribute("startDisplayPage", startEnd[0]);
         model.addAttribute("endDisplayPage", startEnd[1]);
         model.addAttribute("action", "search");
+        model.addAttribute("status", status);
+        model.addAttribute("userType", userType);
         return "authUserPages_userList";
     }
 
