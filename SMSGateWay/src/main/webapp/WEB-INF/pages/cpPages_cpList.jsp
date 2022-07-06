@@ -66,17 +66,58 @@
                 <%@include file="sidebar.jsp" %>
                 <div class="layout-page">
                     <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
-                        <form action="searchCP" method="get" style="width: 20%" name="searchUserForm">
-                            <input type="hidden" name="action" value="search"/>
-                            <input type="text" name="cpName" placeholder="Tên Đối Tác"
-                                   id="usernameOrEmail" class="form-control" value="${cpName}"/>
-                            <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                        <form action="searchCP" method="get" style="" name="" id="formSearch">
+                            <div class="row">
+                                <div class="mb-3 col-md-2">
+                                    <input type="hidden" name="action" value="search"/>
+                                    <input type="text" name="inputSearch" placeholder="Tên/Mã Đối Tác"
+                                           id="" class="form-control" value="${inputSearch}"/>
+                                </div>
+                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
+                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Tạo: </label>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Từ </label>
+                                    <input type="date" name="fromCreateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="" class="form-control" value="${fromCreateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Đến </label>
+                                    <input type="date" name="toCreateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="" class="form-control" value="${toCreateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                                </div>
+                                <div class="mb-3 col-md-2"></div>
+                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
+                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Cập Nhật: </label>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Từ </label>
+                                    <input type="date" name="fromUpdateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="" class="form-control" value="${fromUpdateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Đến </label>
+                                    <input type="date" name="toUpdateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;" 
+                                           pattern=""
+                                           id="" class="form-control" value="${toUpdateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <button class="btn btn-secondary" onclick="resetFormSearch()">Reset</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <!-- Bootstrap Table with Header - Light -->
                     <div class="card">
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-2" style="margin-top: 10px; margin-left: 10px">
                                 <a href="addCP?action=add" style="color: inherit; text-decoration: none">
                                     <button class="btn btn-primary me-2">
                                         Thêm Đối Tác
@@ -244,15 +285,21 @@
             <!-- DataTables -->
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
             <script>
-                $(document).ready(function () {
-                    $('#table1').DataTable();
-                });
+                                        $(document).ready(function () {
+                                            $('#table1').DataTable();
+                                        });
             </script>
-
-            <style>
-                .dataTables_filter, .dataTables_info {
-                    display: none;
+            <script>
+            <script>
+                function resetFormSearch() {
+                        document.getElementById("formSearch").reset();
                 }
-            </style>
-    </body>
+            </script>
+        </script>
+        <style>
+            .dataTables_filter, .dataTables_info {
+                display: none;
+            }
+        </style>
+</body>
 </html>

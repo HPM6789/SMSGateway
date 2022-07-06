@@ -112,6 +112,41 @@ public class CPListDAOImpl implements CPListDAO {
     }
 
     @Override
+    public List<CpListModel> getCpListsByOption(String inputSearch,
+            Date fromCreateDate, Date toCreateDate, Date fromUpdateDate, Date toUpdateDate) {
+        String sql = "select new " + CpListModel.class.getName()
+                + "(c.cpId, c.cpName, c.cpCode, c.contact, c.createdTime,"
+                + " c.updatedTime, c.usernameMt, c.passwordMt, c.listipMt, c.usernameCharge,"
+                + " c.passwordCharge, c.taxCode, c.representer, c.address, c.emailCp) "
+                + " from " + CpList.class.getName() + " c where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and (upper(c.cpName) like upper('%" + inputSearch + "%')"
+                    + " or (upper(c.cpCode) like upper('%" + inputSearch + "%'))";
+        }
+        if (fromCreateDate != null) {
+            sql += " and c.createdTime >= to_date('" + fromCreateDate + "',yyyy/MM/dd)";
+        }
+        if (toCreateDate != null) {
+            sql += " and c.createdTime <= to_date('" + toCreateDate + "',yyyy/MM/dd)";
+        }
+        if (fromUpdateDate != null) {
+            sql += " and c.createdTime >= to_date('" + fromUpdateDate + "',yyyy/MM/dd)";
+        }
+        if (toUpdateDate != null) {
+            sql += " and c.createdTime <= to_date('" + toUpdateDate + "',yyyy/MM/dd)";
+        }
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            List<CpListModel> cp = query.list();
+            return cp;
+        } catch (Exception ex) {
+            Logger.getLogger(CPListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public BigDecimal getNewestCpId() {
         String sql = "select c.cpId"
                 + " from " + CpList.class.getName() + " c"

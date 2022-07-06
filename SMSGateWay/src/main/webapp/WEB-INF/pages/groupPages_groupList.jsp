@@ -66,11 +66,17 @@
                 <%@include file="sidebar.jsp" %>
                 <div class="layout-page">
                     <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
-                        <form action="searchGroup" method="get" style="width: 20%" name="searchUserForm">
-                            <input type="hidden" name="action" value="search"/>
-                            <input type="text" name="groupName" placeholder="Tên Nhóm"
-                                   id="usernameOrEmail" class="form-control" value="${groupName}"/>
-                            <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                        <form action="searchGroup" method="get" style="" name="searchUserForm">
+                            <div class="row">
+                                <div class="mb-3 col-md-3">
+                                    <input type="hidden" name="action" value="search"/>
+                                    <input type="text" name="groupName" placeholder="Tên Nhóm"
+                                           id="" class="form-control" value="${groupName}"/>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <!-- Bootstrap Table with Header - Light -->
@@ -99,8 +105,8 @@
                                     <tr>
                                         <th>Tên Nhóm</th>
                                         <th>Mô Tả</th>
-                                        <th>Ngày Tạo</th>
-                                        <th>Ngày Cập Nhật</th>
+                                        <th>Thành Viên</th>
+                                        <th>Quyền</th>
                                         <th></th>
                                     </tr>
                                 </thead>
