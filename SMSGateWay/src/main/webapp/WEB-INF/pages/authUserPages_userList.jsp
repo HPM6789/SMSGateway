@@ -65,34 +65,49 @@
                 <%@include file="sidebar.jsp" %>
                 <div class="layout-page">
                     <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
-                        <form action="searchUser" method="get" style="width: 20%" name="searchUserForm">
-                            <input type="hidden" name="action" value="search"/>
-                            <input type="text" name="usernameOrEmail" placeholder="Tên người dùng hoặc email"
-                                   id="usernameOrEmail" class="form-control" value="${usernameOrEmail}"/>
-                            <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                        <form action="searchUser" method="get" style="" name="searchUserForm">
+                            <div class="row">
+                                <div class="mb-3 col-md-4">
+                                    <input type="hidden" name="action" value="search"/>
+                                    <input type="text" name="inputSearch" placeholder="username, SĐT, họ tên hoặc email"
+                                           id="inputSearch" class="form-control" value="${inputSearch}"/>
+                                </div>
+                                <div class="mb-3 col-md-2"  style="text-align: right">
+                                    <label class="form-label" for="basic-default-status">Trạng Thái</label>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <input type="radio"  id="basic-default-active" name="status" value="1" class="form-check-input"
+                                    <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
+                                    <input type="radio"  id="basic-default-inactive" name="status" value="0" class="form-check-input"
+                                    <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Không hoạt động
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                                </div>
+                            </div>
                         </form>
                     </div>
-                    <!-- Bootstrap Table with Header - Light -->
-                    <div class="card">
-                        <h5 class="card-header">Danh sách người dùng</h5>
-                        <div class="table-responsive text-nowrap">
-                            <table class="table" >
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Tên Người Dùng</th>
-                                        <th>Họ Tên</th>
-                                        <th>Trạng Thái</th>
-                                        <th>Email</th>
-                                        <th>Loại</th>
-                                        <th>Điện Thoại</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-border-bottom-0">
+                        <!-- Bootstrap Table with Header - Light -->
+                        <div class="card">
+                            <h5 class="card-header">Danh sách người dùng</h5>
+                            <div class="table-responsive text-nowrap">
+                                <table class="table" >
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Tên Người Dùng</th>
+                                            <th>Họ Tên</th>
+                                            <th>Trạng Thái</th>
+                                            <th>Email</th>
+                                            <th>Loại</th>
+                                            <th>Điện Thoại</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-border-bottom-0">
                                     <c:forEach var="u" items="${users}">
                                         <tr>
                                             <td>
-                                                    ${u.userName}
+                                                ${u.userName}
                                             </td>
                                             <td>${u.userFullname}</td>
                                             <td>

@@ -223,6 +223,36 @@ public class AuthUserDAOImpl implements AuthUserDAO {
     }
 
     @Override
+    public List<AuthUserModel> getUserByOption(String inputSearch, BigInteger status) {
+        String sql = "select new " + AuthUserModel.class.getName()
+                + "(a.userId, a.userName, a.userPass, a.userFullname, a.userDesc, a.userStatus, "
+                + "a.userIsSuper, a.userType, a.userAddr, a.userPhone, a.userEmail, "
+                + "a.userCreatedtime, a.userUpdatedtime, a.userLastTimeLogin,"
+                + " a.userOtpFlg"
+                + " ) from " + AuthUser.class.getName() + " a where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and (upper(a.userName) like upper('%" + inputSearch
+                    + "%') or upper(a.userEmail) like upper('%" + inputSearch + "%')"
+                    + " or upper(a.userFullname) like upper('%" + inputSearch + "%')"
+                    + " or a.userPhone like '%" + inputSearch + "%')";
+        }
+        if (status != null) {
+            sql += " and a.userStatus = " + status;
+        }
+        sql += " order by a.userCreatedtime desc";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+
+            List<AuthUserModel> users = query.list();
+            return users;
+        } catch (Exception ex) {
+            Logger.getLogger(AuthUserDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public AuthUserModel getUserWithCP(String username) {
         System.out.println("username: " + username);
         String sql = "select new " + AuthUserModel.class.getName()

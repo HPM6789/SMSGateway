@@ -94,8 +94,9 @@ public class AuthUserController {
     }
 
     @RequestMapping(value = "/searchUser", method = RequestMethod.GET)
-    public String userList(Model model, @RequestParam String usernameOrEmail, HttpSession session,
-            @RequestParam(required = false) String page, @RequestParam String action) {
+    public String userList(Model model, @RequestParam(required = false) String inputSearch, HttpSession session,
+            @RequestParam(required = false) String page, @RequestParam String action, 
+            @RequestParam(required = false) String status) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -110,7 +111,11 @@ public class AuthUserController {
         }
         int pageInt = Integer.parseInt(page);
         int numPerPage = 10;
-        List<AuthUserModel> users = authUserDAO.getUserByUsernameOrEmail(usernameOrEmail);
+        BigInteger statusInt = null;
+        if (status != null) {
+            statusInt = new BigInteger(status);
+        }
+        List<AuthUserModel> users = authUserDAO.getUserByOption(inputSearch, statusInt);
         int totalItem = users.size();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
@@ -123,7 +128,7 @@ public class AuthUserController {
         List<AuthUserModel> userPage = paging.userPaging(start, end, users);
         int[] startEnd = paging.pageRange(pageInt, endPage);
         model.addAttribute("users", userPage);
-        model.addAttribute("usernameOrEmail", usernameOrEmail);
+        model.addAttribute("inputSearch", inputSearch);
         model.addAttribute("endPage", endPage);
         model.addAttribute("page", page);
         model.addAttribute("startDisplayPage", startEnd[0]);
