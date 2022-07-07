@@ -117,6 +117,54 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
     }
 
     @Override
+    public List<CmdcodeListModel> getCmdcodeByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status,
+            int start, int next) {
+        String sql = "select new " + CmdcodeListModel.class.getName()
+                + "(c.cmdId, c.cmdName, c.cmdCode, c.shortcodeCp.shortcodeCpId, c.updateTime, c.createTime, "
+                + "c.status, c.type.typeCode, c.approveTime, c.price,c.description,"
+                + "c.creator.userId, c.creator.userName, c.approver.userId, c.approver.userName"
+                + ")"
+                + " from " + CmdcodeList.class.getName() + " c "
+                + " left join c.shortcodeCp"
+                + " left join c.creator"
+                + " left join c.approver"
+                + " left join c.type"
+                + " where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and (upper(c.cmdName) like upper('%" + inputSearch + "%')"
+                    + " or upper(c.cmdCode) like upper('%" + inputSearch + "%'))";
+        }
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and c.createTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
+        }
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and c.createTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
+        }
+        if (fromUpdateDate != null && !fromUpdateDate.equals("")) {
+            sql += " and c.updateTime >= to_date('" + fromUpdateDate + "','yyyy/MM/dd')";
+        }
+        if (toUpdateDate != null && !toUpdateDate.equals("")) {
+            sql += " and c.updateTime <= to_date('" + toUpdateDate + "','yyyy/MM/dd')";
+        }
+        if (status != null) {
+            sql += " and c.status = " + status;
+        }
+        sql += " order by c.createTime desc";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            query.setFirstResult(start);
+            query.setMaxResults(next);
+            List<CmdcodeListModel> cmds = query.list();
+            return cmds;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public BigDecimal getNewestCmdId() {
         String sql = "select c.cmdId"
                 + " from " + CmdcodeList.class.getName() + " c "
@@ -184,6 +232,41 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
             sql += " where upper(c.cmdName) like upper('%" + cmdName + "%')";
         }
         sql += " order by c.createTime desc";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            Long total = (Long) query.uniqueResult();
+            return total;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return new Long("0");
+        }
+    }
+
+    @Override
+    public Long getTotalCmdcodeByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status) {
+        String sql = "select count(c)"
+                + " from " + CmdcodeList.class.getName() + " c where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and (upper(c.cmdName) like upper('%" + inputSearch + "%')"
+                    + " or upper(c.cmdCode) like upper('%" + inputSearch + "%'))";
+        }
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and c.createTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
+        }
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and c.createTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
+        }
+        if (fromUpdateDate != null && !fromUpdateDate.equals("")) {
+            sql += " and c.updateTime >= to_date('" + fromUpdateDate + "','yyyy/MM/dd')";
+        }
+        if (toUpdateDate != null && !toUpdateDate.equals("")) {
+            sql += " and c.updateTime <= to_date('" + toUpdateDate + "','yyyy/MM/dd')";
+        }
+        if (status != null) {
+            sql += " and c.status = " + status;
+        }
         try {
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);

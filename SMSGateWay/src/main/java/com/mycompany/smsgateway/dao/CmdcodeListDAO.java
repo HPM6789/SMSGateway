@@ -21,6 +21,10 @@ public interface CmdcodeListDAO {
 
     public List<CmdcodeListModel> getCmdcodeByName(String cmdName, int start, int next);
     
+    public List<CmdcodeListModel> getCmdcodeByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status,
+            int start, int next);
+    
     public BigDecimal getNewestCmdId();
     
     public CmdcodeListModel getCmdcodeById(BigDecimal cmdId);
@@ -28,6 +32,9 @@ public interface CmdcodeListDAO {
     public Long getTotalCmdcode();
 
     public Long getTotalCmdcodeByName(String cmdName);
+    
+    public Long getTotalCmdcodeByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status);
     
     public int approveAllCmdcode();
     

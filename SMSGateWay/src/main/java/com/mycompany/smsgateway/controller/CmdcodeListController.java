@@ -89,7 +89,12 @@ public class CmdcodeListController {
 
     @RequestMapping(value = "searchCmdcode", method = RequestMethod.GET)
     public String searchCmdcode(Model model, HttpSession session, @RequestParam String action,
-            @RequestParam(required = false) String page, @RequestParam String cmdName) {
+            @RequestParam(required = false) String page, @RequestParam String inputSearch,
+            @RequestParam(required = false) String fromCreateDate,
+            @RequestParam(required = false) String toCreateDate,
+            @RequestParam(required = false) String fromUpdateDate,
+            @RequestParam(required = false) String toUpdateDate,
+            @RequestParam(required = false) String status) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -104,14 +109,20 @@ public class CmdcodeListController {
         }
         int pageInt = Integer.parseInt(page);
         int numPerPage = 10;
-        int totalItem = cmdcodeListDAO.getTotalCmdcodeByName(cmdName).intValue();
+        BigInteger statusInt = null;
+        if (status != null && !status.equals("")){
+            statusInt = new BigInteger(status);
+        }
+        int totalItem = cmdcodeListDAO.getTotalCmdcodeByOption(inputSearch, 
+                fromCreateDate, toCreateDate, fromUpdateDate, toUpdateDate, statusInt).intValue();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
             endPage++;
         }
         int start = (pageInt - 1) * numPerPage;
 //        int end = Math.min(pageInt * numPerPage, totalItem);
-        List<CmdcodeListModel> cmdPage = cmdcodeListDAO.getCmdcodeByName(cmdName, start, numPerPage);
+        List<CmdcodeListModel> cmdPage = cmdcodeListDAO.getCmdcodeByOption(inputSearch, 
+                fromCreateDate, toCreateDate, fromUpdateDate, toUpdateDate, statusInt, start, numPerPage);
         int[] startEnd = paging.pageRange(pageInt, endPage);
         model.addAttribute("cmds", cmdPage);
         model.addAttribute("action", action);
@@ -119,7 +130,12 @@ public class CmdcodeListController {
         model.addAttribute("page", page);
         model.addAttribute("startDisplayPage", startEnd[0]);
         model.addAttribute("endDisplayPage", startEnd[1]);
-        model.addAttribute("cmdName", cmdName);
+        model.addAttribute("inputSearch", inputSearch);
+        model.addAttribute("fromCreateDate", fromCreateDate);
+        model.addAttribute("toCreateDate", toCreateDate);
+        model.addAttribute("fromUpdateDate", fromUpdateDate);
+        model.addAttribute("toUpdateDate", toUpdateDate);
+        model.addAttribute("status", status);
         return "cmdPages_cmdcodeList";
     }
 

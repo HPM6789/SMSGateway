@@ -98,7 +98,7 @@ public class ShortcodeController {
         int pageInt = Integer.parseInt(page);
         int numPerPage = 15;
         BigInteger statusInt = null;
-        if (status != null){
+        if (status != null && !status.equals("")){
             statusInt = new BigInteger(status);
         }
         List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcodeByOption(inputSearch,
