@@ -66,13 +66,63 @@
                 <%@include file="sidebar.jsp" %>
                 <div class="layout-page">
                     <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
-                        <form action="searchShortcode" method="get" style="width: 20%" name="searchUserForm">
+                        <form action="searchShortcode" method="get" style="" name="searchUserForm">
                             <input type="hidden" name="action" value="search"/>
-                            <p id="errorShortcode"></p>
-                            <input type="text" name="shortcode" placeholder="Nhập đầu số"
-                                   id="shortcodeSearch" class="form-control" value="${shortcode}"
-                                   onchange="validateShortcode()"/>
-                            <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                            <div class="row">
+                                <div class="mb-3 col-md-2">
+                                    <input type="text" name="inputSearch" placeholder="Nhập đầu số"
+                                           id="inputSearch" class="form-control" value="${inputSearch}"
+                                           onchange=""/>
+                                </div>
+                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
+                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Tạo: </label>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Từ </label>
+                                    <input type="date" name="fromCreateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="fromCreateDate" class="form-control" value="${fromCreateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Đến </label>
+                                    <input type="date" name="toCreateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="toCreateDate" class="form-control" value="${toCreateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                                </div>
+                                <div class="mb-3 col-md-2"></div>
+                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
+                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Cập Nhật: </label>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Từ </label>
+                                    <input type="date" name="fromUpdateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="fromUpdateDate" class="form-control" value="${fromUpdateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Đến </label>
+                                    <input type="date" name="toUpdateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;" 
+                                           pattern=""
+                                           id="toUpdateDate" class="form-control" value="${toUpdateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
+                                </div>
+                                <div class="mb-3 col-md-2"></div>
+                                <div class="mb-3 col-md-2"  style="text-align: right">
+                                    <label class="form-label" for="basic-default-status">Trạng Thái</label>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <input type="radio"  id="radioStatus1" name="status" value="1" class="form-check-input"
+                                    <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
+                                    <input type="radio"  id="radioStatus0" name="status" value="0" class="form-check-input"
+                                    <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Không hoạt động
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <!-- Bootstrap Table with Header - Light -->
@@ -113,9 +163,7 @@
                                     <c:forEach var="s" items="${shortcodes}">
                                         <tr>
                                             <td>
-                                                <a href="#" style="color: inherit;">
                                                     ${s.shortcode}
-                                                </a>
                                             </td>
                                             <td><fmt:formatDate value="${s.createTime}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
                                             <td><fmt:formatDate value="${s.updateTime}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
@@ -202,29 +250,29 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
                                             <li class="page-item first">
-                                                <a class="page-link" href="searchShortcode?page=1&shortcode=${shortcode}&action=search"
+                                                <a class="page-link" href="searchShortcode?page=1&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevrons-left"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item prev">
-                                                <a class="page-link" href="searchShortcode?page=${(page==1)?1:(page-1)}&shortcode=${shortcode}&action=search"
+                                                <a class="page-link" href="searchShortcode?page=${(page==1)?1:(page-1)}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevron-left"></i
                                                     ></a>
                                             </li>
                                             <c:forEach var="i" begin="${startDisplayPage}" end="${endDisplayPage}">
                                                 <li class="page-item ${i==page?"active":""}">
-                                                    <a class="page-link" href="searchShortcode?page=${i}&shortcode=${shortcode}&action=search">
+                                                    <a class="page-link" href="searchShortcode?page=${i}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}">
                                                         ${i}
                                                     </a>
                                                 </li>
                                             </c:forEach>
                                             <li class="page-item next">
-                                                <a class="page-link" href="searchShortcode?page=${(page==endPage)?endPage:(page+1)}&shortcode=${shortcode}&action=search"
+                                                <a class="page-link" href="searchShortcode?page=${(page==endPage)?endPage:(page+1)}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevron-right"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item last">
-                                                <a class="page-link" href="searchShortcode?page=${endPage}&shortcode=${shortcode}&action=search"
+                                                <a class="page-link" href="searchShortcode?page=${endPage}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevrons-right"></i
                                                     ></a>
                                             </li>
@@ -266,24 +314,21 @@
             <!-- DataTables -->
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
             <script>
-                                       $(document).ready(function () {
-                                           $('#table1').DataTable();
-                                       });
+                                        $(document).ready(function () {
+                                            $('#table1').DataTable();
+                                        });
             </script>
             <script>
-                function validateShortcode() {
-                    var mobile = document.getElementById("shortcodeSearch").value;
-                    var regex = "^[0-9]+$";
-                    if (!mobile.match(regex) && mobile != null && mobile !== "") {
-                        document.getElementById("errorShortcode").innerHTML = "Invalid mobile";
-                        document.getElementById("errorShortcode").style = "color: red";
-                        document.getElementById("shortcodeSearch").style = "border-color: red";
-                    } else {
-                        document.getElementById("errorShortcode").innerHTML = "";
-                        document.getElementById("errorShortcode").style = "color: ";
-                        document.getElementById("shortcodeSearch").style = "border-color:";
-                    }
-                }
+                
+                function resetFormSearch() {
+                    document.getElementById("inputSearch").value = "";
+                    document.getElementById("fromCreateDate").value = "";
+                    document.getElementById("toCreateDate").value = "";
+                    document.getElementById("fromUpdateDate").value = "";
+                    document.getElementById("toUpdateDate").value = "";
+                    document.getElementById("radioStatus0").checked = false;
+                    document.getElementById("radioStatus1").checked = false;
+                };
             </script>
             <style>
                 .dataTables_filter, .dataTables_info {

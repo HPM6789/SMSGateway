@@ -76,8 +76,13 @@ public class ShortcodeController {
     }
 
     @RequestMapping(value = "searchShortcode", method = RequestMethod.GET)
-    public String shortcodeList(Model model, @RequestParam String shortcode, HttpSession session,
-            @RequestParam(required = false) String page, @RequestParam String action) {
+    public String shortcodeList(Model model, @RequestParam String inputSearch, HttpSession session,
+            @RequestParam(required = false) String page, @RequestParam String action,
+            @RequestParam(required = false) String fromCreateDate,
+            @RequestParam(required = false) String toCreateDate,
+            @RequestParam(required = false) String fromUpdateDate,
+            @RequestParam(required = false) String toUpdateDate,
+            @RequestParam(required = false) String status) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -92,7 +97,12 @@ public class ShortcodeController {
         }
         int pageInt = Integer.parseInt(page);
         int numPerPage = 15;
-        List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcodeByCode(shortcode);
+        BigInteger statusInt = null;
+        if (status != null){
+            statusInt = new BigInteger(status);
+        }
+        List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcodeByOption(inputSearch,
+                fromCreateDate, toCreateDate, fromUpdateDate, toUpdateDate, statusInt);
         int totalItem = shortcodes.size();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
@@ -108,7 +118,12 @@ public class ShortcodeController {
         model.addAttribute("startDisplayPage", startEnd[0]);
         model.addAttribute("endDisplayPage", startEnd[1]);
         model.addAttribute("action", action);
-        model.addAttribute("shortcode", shortcode);
+        model.addAttribute("inputSearch", inputSearch);
+        model.addAttribute("fromCreateDate", fromCreateDate);
+        model.addAttribute("toCreateDate", toCreateDate);
+        model.addAttribute("fromUpdateDate", fromUpdateDate);
+        model.addAttribute("toUpdateDate", toUpdateDate);
+        model.addAttribute("status", status);
         return "shortcodePages_shortcodeList";
     }
 

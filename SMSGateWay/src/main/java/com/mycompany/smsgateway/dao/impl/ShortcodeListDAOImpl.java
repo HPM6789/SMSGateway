@@ -74,6 +74,45 @@ public class ShortcodeListDAOImpl implements ShortcodeListDAO {
     }
 
     @Override
+    public List<ShortcodeListModel> getAllShortcodeByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status) {
+        String sql = "select new " + ShortcodeListModel.class.getName()
+                + "(s.shcodeId, s.shortcode, s.price, s.limitedMtNo, s.createTime, s.updateTime, "
+                + "s.approveTime, s.status, s.user.userName, s.user.userId)"
+                + " from " + ShortcodeList.class.getName() + " s"
+                + " inner join s.user where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and s.shortcode like '%" + inputSearch + "%'";
+        }
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and s.createTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
+        }
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and s.createTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
+        }
+        if (fromUpdateDate != null && !fromUpdateDate.equals("")) {
+            sql += " and s.updateTime >= to_date('" + fromUpdateDate + "','yyyy/MM/dd')";
+        }
+        if (toUpdateDate != null && !toUpdateDate.equals("")) {
+            sql += " and s.updateTime <= to_date('" + toUpdateDate + "','yyyy/MM/dd')";
+        }
+        if (status != null) {
+            sql += " and s.status = " + status;
+        }
+        sql += " order by s.createTime desc";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            List<ShortcodeListModel> shortcodes = query.list();
+            return shortcodes;
+        } catch (Exception ex) {
+            Logger.getLogger(ShortcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+
+    @Override
     public BigDecimal getNewestShcodeId() {
         String sql = "select s.shcodeId"
                 + " from " + ShortcodeList.class.getName() + " s"

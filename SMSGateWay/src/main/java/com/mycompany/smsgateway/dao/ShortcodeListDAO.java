@@ -19,6 +19,9 @@ public interface ShortcodeListDAO {
 
     public List<ShortcodeListModel> getAllShortcodeByCode(String shortcode);
     
+    public List<ShortcodeListModel> getAllShortcodeByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status);
+    
     public BigDecimal getNewestShcodeId();
 
     public ShortcodeListModel getShortcodeByCode(String shortcode);
