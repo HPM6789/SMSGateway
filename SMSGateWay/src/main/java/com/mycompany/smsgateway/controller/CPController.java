@@ -12,7 +12,6 @@ import com.mycompany.smsgateway.model.CpListModel;
 import com.mycompany.smsgateway.model.ShortcodeListModel;
 import com.mycompany.smsgateway.services.ActionLogServices;
 import com.mycompany.smsgateway.services.Paging;
-import com.mycompany.smsgateway.services.ParseDataTypeService;
 import com.mycompany.smsgateway.services.ShortcodeServices;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -52,9 +51,6 @@ public class CPController {
 
     @Autowired
     private ActionLogServices actionLogServices;
-    
-    @Autowired
-    private ParseDataTypeService parseDataTypeService;
 
     @RequestMapping(value = "cpList", method = RequestMethod.GET)
     public String cpList(Model model, HttpSession session,
@@ -97,7 +93,7 @@ public class CPController {
     }
 
     @RequestMapping(value = "searchCP", method = RequestMethod.GET)
-    public String cpList(Model model, @RequestParam String inputSearch, HttpSession session,
+    public String cpList(Model model, @RequestParam(required = false) String inputSearch, HttpSession session,
             @RequestParam(required = false) String page, @RequestParam String action,
             @RequestParam(required = false) String fromCreateDate,
             @RequestParam(required = false) String toCreateDate,
@@ -112,17 +108,13 @@ public class CPController {
             model.addAttribute("message", "This page is protected!");
             return "accessDeniedPage";
         }
-        Date fromCreate = parseDataTypeService.parseToDate(fromCreateDate);
-        Date toCreate = parseDataTypeService.parseToDate(toCreateDate);
-        Date fromUpdate = parseDataTypeService.parseToDate(fromUpdateDate);
-        Date toUpdate = parseDataTypeService.parseToDate(toUpdateDate);
         if (page == null || page.equals("")) {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
         int numPerPage = 10;
         List<CpListModel> cpList = cpListDAO.getCpListsByOption(inputSearch, 
-                fromCreate, toCreate, fromCreate, toUpdate);
+                fromCreateDate, toCreateDate, fromUpdateDate, toUpdateDate);
         int totalItem = cpList.size();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
@@ -134,6 +126,10 @@ public class CPController {
         int[] startEnd = paging.pageRange(pageInt, endPage);
         model.addAttribute("cpLists", cpListPage);
         model.addAttribute("inputSearch", inputSearch);
+        model.addAttribute("fromCreateDate", fromCreateDate);
+        model.addAttribute("toCreateDate", toCreateDate);
+        model.addAttribute("fromUpdateDate", fromUpdateDate);
+        model.addAttribute("toUpdateDate", toUpdateDate);
         model.addAttribute("endPage", endPage);
         model.addAttribute("page", page);
         model.addAttribute("startDisplayPage", startEnd[0]);

@@ -71,7 +71,7 @@
                                 <div class="mb-3 col-md-2">
                                     <input type="hidden" name="action" value="search"/>
                                     <input type="text" name="inputSearch" placeholder="Tên/Mã Đối Tác"
-                                           id="" class="form-control" value="${inputSearch}"/>
+                                           id="inputSearch" class="form-control" value="${inputSearch}"/>
                                 </div>
                                 <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
                                     <label class="form-label" for="" style="padding-left: 50px">Ngày Tạo: </label>
@@ -80,13 +80,13 @@
                                     <label class="form-label" for="">Từ </label>
                                     <input type="date" name="fromCreateDate" style="width: auto; display: inline-block;
                                            margin-left: 10px;"
-                                           id="" class="form-control" value="${fromCreateDate}"/>
+                                           id="fromCreateDate" class="form-control" value="${fromCreateDate}"/>
                                 </div>
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label" for="">Đến </label>
                                     <input type="date" name="toCreateDate" style="width: auto; display: inline-block;
                                            margin-left: 10px;"
-                                           id="" class="form-control" value="${toCreateDate}"/>
+                                           id="toCreateDate" class="form-control" value="${toCreateDate}"/>
                                 </div>
                                 <div class="mb-3 col-md-2">
                                     <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
@@ -99,17 +99,17 @@
                                     <label class="form-label" for="">Từ </label>
                                     <input type="date" name="fromUpdateDate" style="width: auto; display: inline-block;
                                            margin-left: 10px;"
-                                           id="" class="form-control" value="${fromUpdateDate}"/>
+                                           id="fromUpdateDate" class="form-control" value="${fromUpdateDate}"/>
                                 </div>
                                 <div class="mb-3 col-md-3">
                                     <label class="form-label" for="">Đến </label>
                                     <input type="date" name="toUpdateDate" style="width: auto; display: inline-block;
                                            margin-left: 10px;" 
                                            pattern=""
-                                           id="" class="form-control" value="${toUpdateDate}"/>
+                                           id="toUpdateDate" class="form-control" value="${toUpdateDate}"/>
                                 </div>
                                 <div class="mb-3 col-md-2">
-                                    <button class="btn btn-secondary" onclick="resetFormSearch()">Reset</button>
+                                    <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
                                 </div>
                             </div>
                         </form>
@@ -221,29 +221,29 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
                                             <li class="page-item first">
-                                                <a class="page-link" href="searchCP?page=1&cpName=${cpName}&action=search"
+                                                <a class="page-link" href="searchCP?page=1&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
                                                    ><i class="tf-icon bx bx-chevrons-left"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item prev">
-                                                <a class="page-link" href="searchCP?page=${(page==1)?1:(page-1)}&cpName=${cpName}&action=search"
+                                                <a class="page-link" href="searchCP?page=${(page==1)?1:(page-1)}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
                                                    ><i class="tf-icon bx bx-chevron-left"></i
                                                     ></a>
                                             </li>
                                             <c:forEach var="i" begin="${startDisplayPage}" end="${endDisplayPage}">
                                                 <li class="page-item ${i==page?"active":""}">
-                                                    <a class="page-link" href="searchCP?page=${i}&cpName=${cpName}&action=search">
+                                                    <a class="page-link" href="searchCP?page=${i}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}">
                                                         ${i}
                                                     </a>
                                                 </li>
                                             </c:forEach>
                                             <li class="page-item next">
-                                                <a class="page-link" href="searchCP?page=${(page==endPage)?endPage:(page+1)}&cpName=${cpName}&action=search"
+                                                <a class="page-link" href="searchCP?page=${(page==endPage)?endPage:(page+1)}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
                                                    ><i class="tf-icon bx bx-chevron-right"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item last">
-                                                <a class="page-link" href="searchCP?page=${endPage}&cpName=${cpName}&action=search"
+                                                <a class="page-link" href="searchCP?page=${endPage}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
                                                    ><i class="tf-icon bx bx-chevrons-right"></i
                                                     ></a>
                                             </li>
@@ -290,12 +290,14 @@
                                         });
             </script>
             <script>
-            <script>
                 function resetFormSearch() {
-                        document.getElementById("formSearch").reset();
-                }
+                    document.getElementById("inputSearch").value = "";
+                    document.getElementById("fromCreateDate").value = "";
+                    document.getElementById("toCreateDate").value = "";
+                    document.getElementById("fromUpdateDate").value = "";
+                    document.getElementById("toUpdateDate").value = "";
+                };
             </script>
-        </script>
         <style>
             .dataTables_filter, .dataTables_info {
                 display: none;

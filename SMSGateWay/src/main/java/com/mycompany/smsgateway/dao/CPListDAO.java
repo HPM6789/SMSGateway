@@ -22,8 +22,8 @@ public interface CPListDAO {
 
     public List<CpListModel> getCpListsByName(String name);
 
-    public List<CpListModel> getCpListsByOption(String inputSearch, Date fromCreateDate,
-            Date toCreateDate, Date fromUpdateDate, Date toUpdateDate);
+    public List<CpListModel> getCpListsByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String fromUpdateDate, String toUpdateDate);
 
     public BigDecimal getNewestCpId();
 

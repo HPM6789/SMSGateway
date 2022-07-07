@@ -84,7 +84,8 @@
                                     <div class="mb-3 col-md-2">
                                         <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
                                     </div>
-                                    <div class="mb-3 col-md-1"  style="text-align: right">
+                                    <div class="mb-3 col-md-4"></div>
+                                    <div class="mb-3 col-md-2"  style="text-align: right">
                                         <label class="form-label" for="basic-default-status">Loại</label>
                                     </div>
                                     <div class="mb-3 col-md-4">
@@ -95,8 +96,8 @@
                                         <input type="radio"  id="radioType2" name="userType" value="2" class="form-check-input"
                                         <c:if test="${userType == 2}">checked=""</c:if>/>&nbsp;VNP
                                     </div>
-                                    <div class="mb-3 col-md-1">
-                                        <button class="btn btn-secondary" onclick="resetFormSearch()">Reset</button>
+                                    <div class="mb-3 col-md-2">
+                                        <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
                                     </div>
                                 </div>
                             </form>
@@ -236,29 +237,29 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
                                             <li class="page-item first">
-                                                <a class="page-link" href="searchUser?page=1&usernameOrEmail=${usernameOrEmail}&action=search"
+                                                <a class="page-link" href="searchUser?page=1&inputSearch=${inputSearch}&action=search&status=${status}&userType=${userType}"
                                                    ><i class="tf-icon bx bx-chevrons-left"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item prev">
-                                                <a class="page-link" href="searchUser?page=${(page==1)?1:(page-1)}&usernameOrEmail=${usernameOrEmail}&action=search"
+                                                <a class="page-link" href="searchUser?page=${(page==1)?1:(page-1)}&inputSearch=${inputSearch}&action=search&status=${status}&userType=${userType}"
                                                    ><i class="tf-icon bx bx-chevron-left"></i
                                                     ></a>
                                             </li>
                                             <c:forEach var="i" begin="${startDisplayPage}" end="${endDisplayPage}">
                                                 <li class="page-item ${i==page?"active":""}">
-                                                    <a class="page-link" href="searchUser?page=${i}&usernameOrEmail=${usernameOrEmail}&action=search">
+                                                    <a class="page-link" href="searchUser?page=${i}&inputSearch=${inputSearch}&action=search&status=${status}&userType=${userType}">
                                                         ${i}
                                                     </a>
                                                 </li>
                                             </c:forEach>
                                             <li class="page-item next">
-                                                <a class="page-link" href="searchUser?page=${(page==endPage)?endPage:(page+1)}&usernameOrEmail=${usernameOrEmail}&action=search"
+                                                <a class="page-link" href="searchUser?page=${(page==endPage)?endPage:(page+1)}&inputSearch=${inputSearch}&action=search&status=${status}&userType=${userType}"
                                                    ><i class="tf-icon bx bx-chevron-right"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item last">
-                                                <a class="page-link" href="searchUser?page=${endPage}&usernameOrEmail=${usernameOrEmail}&action=search"
+                                                <a class="page-link" href="searchUser?page=${endPage}&inputSearch=${inputSearch}&action=search&status=${status}&userType=${userType}"
                                                    ><i class="tf-icon bx bx-chevrons-right"></i
                                                     ></a>
                                             </li>
@@ -306,14 +307,14 @@
             });
         </script>
         <script>
-            function resetFormSearch() {
-                document.getElementById("formSearch").reset();  
-                document.getElementById("radioType0").checked = false;
-                document.getElementById("radioType1").checked = false;
-                document.getElementById("radioType2").checked = false;
+           function resetFormSearch() {
+                document.getElementById("inputSearch").value = "";
                 document.getElementById("radioStatus0").checked = false;
                 document.getElementById("radioStatus1").checked = false;
-            }
+                document.getElementById("radioType1").checked = false;
+                document.getElementById("radioType2").checked = false;
+                document.getElementById("radioType0").checked = false;
+           };
         </script>
         <style>
             .dataTables_filter, .dataTables_info {

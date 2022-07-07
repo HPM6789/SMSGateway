@@ -113,7 +113,8 @@ public class CPListDAOImpl implements CPListDAO {
 
     @Override
     public List<CpListModel> getCpListsByOption(String inputSearch,
-            Date fromCreateDate, Date toCreateDate, Date fromUpdateDate, Date toUpdateDate) {
+            String fromCreateDate, String toCreateDate, String fromUpdateDate, 
+            String toUpdateDate) {
         String sql = "select new " + CpListModel.class.getName()
                 + "(c.cpId, c.cpName, c.cpCode, c.contact, c.createdTime,"
                 + " c.updatedTime, c.usernameMt, c.passwordMt, c.listipMt, c.usernameCharge,"
@@ -121,20 +122,21 @@ public class CPListDAOImpl implements CPListDAO {
                 + " from " + CpList.class.getName() + " c where 1=1";
         if (inputSearch != null && !inputSearch.equals("")) {
             sql += " and (upper(c.cpName) like upper('%" + inputSearch + "%')"
-                    + " or (upper(c.cpCode) like upper('%" + inputSearch + "%'))";
+                    + " or upper(c.cpCode) like upper('%" + inputSearch + "%'))";
         }
-        if (fromCreateDate != null) {
-            sql += " and c.createdTime >= to_date('" + fromCreateDate + "',yyyy/MM/dd)";
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and c.createdTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
         }
-        if (toCreateDate != null) {
-            sql += " and c.createdTime <= to_date('" + toCreateDate + "',yyyy/MM/dd)";
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and c.createdTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
         }
-        if (fromUpdateDate != null) {
-            sql += " and c.createdTime >= to_date('" + fromUpdateDate + "',yyyy/MM/dd)";
+        if (fromUpdateDate != null && !fromUpdateDate.equals("")) {
+            sql += " and c.updatedTime >= to_date('" + fromUpdateDate + "','yyyy/MM/dd')";
         }
-        if (toUpdateDate != null) {
-            sql += " and c.createdTime <= to_date('" + toUpdateDate + "',yyyy/MM/dd)";
+        if (toUpdateDate != null && !toUpdateDate.equals("")) {
+            sql += " and c.updatedTime <= to_date('" + toUpdateDate + "','yyyy/MM/dd')";
         }
+        sql += " order by c.createdTime desc";
         try {
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);
