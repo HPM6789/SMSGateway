@@ -107,69 +107,7 @@
                                             <h5 class="mb-0">Thông Tin</h5>
                                             <small class="text-muted float-end"></small>
                                         </div>
-                                        <c:if test="${action.equals('update')}">
-                                            <div style="right:0">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalShortcode">
-                                                    Cập nhật đầu số
-                                                </button>
-
-                                                <!-- Modal -->
-                                                <div class="modal modal-top fade" id="modalShortcode" tabindex="-1">
-                                                    <div class="modal-dialog">
-                                                        <form action="updateShortcodeForCp" method="post" class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="modalTopTitle">Cập nhật đầu số</h5>
-                                                                <button
-                                                                    type="button"
-                                                                    class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"
-                                                                    ></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="row">
-                                                                    <div class="col mb-3">
-                                                                        <h5 class="text-light fw-semibold">Đầu Số</h5>
-                                                                        <div class="demo-inline-spacing mt-3">
-                                                                            <div class="list-group" style="overflow: scroll">
-                                                                                <c:forEach var="sc" items="${shortcodeByCp}">
-                                                                                    <a href="javascript:void(0);" class="list-group-item list-group-item-action "
-                                                                                       >${sc}</a
-                                                                                    >
-                                                                                </c:forEach>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col mb-3">
-                                                                        <input type="hidden" name="cpId" value="${cpId}"/>
-                                                                        <label for="shortcodeCp" class="form-label">Danh Sách Đầu Số</label>
-                                                                        <select class="selectpicker" name="shcodeId"  data-live-search="true"
-                                                                                id="searchShortcode" multiple data-actions-box="true">
-                                                                            <c:forEach var="sc" items="${shortcodes}">
-                                                                                <option value="${sc.shcodeId}"
-                                                                                        <c:if test="${shortcodeByCp.contains(sc.shortcode)}">
-                                                                                            selected=""
-                                                                                        </c:if>>
-                                                                                    ${sc.shortcode}
-                                                                                </option>
-                                                                            </c:forEach>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                                                    Đóng
-                                                                </button>
-
-                                                                <button type="submit" class="btn btn-primary">Cập nhật</button>
-
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </c:if>
+                                        
                                         <div class="card-body">
                                             <c:if test="${notice!=null}">
                                                 ${notice}

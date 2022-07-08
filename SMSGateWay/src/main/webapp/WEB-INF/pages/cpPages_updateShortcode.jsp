@@ -29,7 +29,7 @@
             content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
             />
 
-        <title>Cập Nhật Thành Viên Nhóm</title>
+        <title>Cập Nhật Đầu Số Cho Đối Tác</title>
 
         <meta name="description" content="" />
         <!--select searchbox-->
@@ -93,16 +93,16 @@
                         <!-- Content -->
 
                         <div class="container-xxl flex-grow-1 container-p-y">
-                            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Cập Nhật Thành Viên Nhóm</h4>
+                            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Cập Nhật Đầu Số Cho Đối Tác</h4>
                             <!-- Basic Layout -->
                             <div class="row">
                                 <div class="col-xl-12">
                                     <div class="card mb-4">
                                         <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h5 class="mb-0">Danh Sách Thành Viên</h5>
+                                            <h5 class="mb-0">Danh Sách Đầu Số</h5>
                                             <small class="text-muted float-end"></small>
                                             <div style="position: absolute; right: 24px; ">
-                                                <a href="groupList?action=list&page=${page}" style="color: inherit; text-decoration: none">
+                                                <a href="cpList?action=list&page=${page}" style="color: inherit; text-decoration: none">
                                                     <button class="btn btn-primary me-2" style="width: 100%">
                                                         Quay Lại
                                                     </button>
@@ -114,8 +114,9 @@
                                             <c:if test="${notice!=null}">
                                                 ${notice}
                                             </c:if>
-                                            <form action="updateMemberForGroup" method="post">
-                                                <input type="hidden" name="groupId" value="${groupId}"/>
+                                            
+                                            <form action="updateShortcodeForCp" method="post">
+                                                <input type="hidden" name="cpId" value="${cpId}"/>
                                                 <input type="hidden" name="page" value="${page}"/>
                                                 <div style="margin-bottom: 10px">
                                                     <button type="submit" class="btn btn-primary" >Cập Nhật</button>
@@ -124,16 +125,16 @@
                                                            margin-left: 5px" id="selectAll" name="" autofocus/>
                                                 </div>
                                                 <div class="row">
-                                                    <c:forEach var="u" items="${users}">
-                                                        <div class="mb-3 col-md-3">
+                                                    <c:forEach var="sc" items="${shortcodes}">
+                                                        <div class="mb-3 col-md-1">
                                                             <div class="row">
                                                                 <div class="mb-3 col-md-8">
-                                                                    <label for="membersId" class="form-label">${u.userName}</label>
+                                                                    <label for="shcodeId" class="form-label">${sc.shortcode}</label>
                                                                 </div>
                                                                 <div class="mb-3 col-md-4">
-                                                                    <input class="form-check-input membersId" type="checkbox"
-                                                                        id="membersId" name="membersId" value="${u.userId}" autofocus 
-                                                                        <c:if test="${usernamesInGr.contains(u.userName)}">checked=""</c:if>
+                                                                    <input class="form-check-input shcodeId" type="checkbox"
+                                                                        id="shcodeId" name="shcodeId" value="${sc.shcodeId}" autofocus 
+                                                                        <c:if test="${shortcodeByCp.contains(sc.shortcode)}">checked=""</c:if>
                                                                         />
                                                                 </div>
                                                             </div>
@@ -211,7 +212,7 @@
             });
             document.getElementById("selectAll").onclick = function () {
                     var check = document.getElementById("selectAll").checked;
-                    var checkboxes = document.getElementsByClassName("membersId");
+                    var checkboxes = document.getElementsByClassName("shcodeId");
                     if (check === true) {
                         for (var i = 0; i < checkboxes.length; i++) {
                             checkboxes[i].checked = true;

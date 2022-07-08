@@ -307,10 +307,32 @@ public class CPController {
         return "cpPages_cpDetail";
     }
 
+    @RequestMapping(value = "updateShortcodeForCp", method = RequestMethod.GET)
+    public String updateShortcodeForCp(Model model, HttpSession session, @RequestParam String cpId,
+            @RequestParam String page) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CP_UPDATE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcode();
+        BigDecimal cpIdDecimal = new BigDecimal(cpId);
+        List<String> shortcodeByCp = shortcodeCpDAO.getAllShortcodeByCpId(cpIdDecimal);
+        model.addAttribute("cpId", cpId);
+        model.addAttribute("shortcodeByCp", shortcodeByCp);
+        model.addAttribute("shortcodes", shortcodes);
+        model.addAttribute("page", page);
+        return "cpPages_updateShortcode";
+    }
+    
     @RequestMapping(value = "updateShortcodeForCp", method = RequestMethod.POST)
     public String updateShortcodeForCp(Model model, HttpSession session,
             @RequestParam(required = false) List<String> shcodeId, @RequestParam String cpId,
-            HttpServletRequest request) {
+            HttpServletRequest request, @RequestParam String page) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -345,6 +367,13 @@ public class CPController {
         actionLogServices.logAction(userSession.getUserId(), "UPDATE_SHORTCODE_CP",
                 "CP_LIST", cpIdDec.toBigInteger(), actionResult, "Cập nhật đầu số cho đối tác",
                 null, null, request);
-        return "redirect:updateCP?action=update&cpId=" + cpId;
+        List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcode();
+        BigDecimal cpIdDecimal = new BigDecimal(cpId);
+        List<String> shortcodeByCp = shortcodeCpDAO.getAllShortcodeByCpId(cpIdDecimal);
+        model.addAttribute("cpId", cpId);
+        model.addAttribute("shortcodeByCp", shortcodeByCp);
+        model.addAttribute("shortcodes", shortcodes);
+        model.addAttribute("page", page);
+        return "cpPages_updateShortcode";
     }
 }

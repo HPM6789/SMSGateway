@@ -142,7 +142,7 @@
                                         <th>Tên</th>
                                         <th>Mã</th>
                                         <th>Ngày Khởi Tạo</th>
-                                        <th>Ngày Cập Nhật</th>
+                                        <th>Cập nhật đầu số</th>
                                         <th>Đại Diện</th>
                                         <th></th>
                                     </tr>
@@ -159,7 +159,11 @@
                                                 <fmt:formatDate value="${cpLists.get(i-1).createdTime}" pattern="dd/MM/yyyy"/>
                                             </td>
                                             <td>
-                                                <fmt:formatDate value="${cpLists.get(i-1).updatedTime}" pattern="dd/MM/yyyy"/>
+                                                <a href="updateShortcodeForCp?cpId=${cpLists.get(i-1).cpId}&page=${page}" style="color: inherit; text-decoration: none">
+                                                    <button class="btn btn-primary me-2">
+                                                        Cập Nhật Đầu Số
+                                                    </button>
+                                                </a>
                                             </td>
                                             <td>${cpLists.get(i-1).representer}</td>
 

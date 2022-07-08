@@ -119,11 +119,14 @@
                                                 ${notice}
                                             </c:if>
                                             <form action="updateRoleForGroup" method="post">
-                                                <div style="text-align: right; margin-bottom: 10px">
-                                                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
-                                                </div>
                                                 <input type="hidden" name="groupId" value="${groupId}"/>
                                                 <input type="hidden" name="page" value="${page}"/>
+                                                <div style="margin-bottom: 10px">
+                                                    <button type="submit" class="btn btn-primary" >Cập Nhật</button>
+                                                    <label for="" class="form-label" style="margin-left: 20px; line-height: 39px">Select All</label>
+                                                    <input class="form-check-input" type="checkbox" style="float: left;height: 25px; width: 25px;
+                                                           margin-left: 5px" id="selectAll" name="" autofocus/>
+                                                </div>
                                                 <div class="row">
                                                     <c:forEach var="r" items="${roles}">
                                                         <div class="mb-3 col-md-3">
@@ -132,7 +135,7 @@
                                                                     <label for="rolesId" class="form-label">${r.name}</label>
                                                                 </div>
                                                                 <div class="mb-3 col-md-4">
-                                                                    <input class="form-check-input" type="checkbox"
+                                                                    <input class="form-check-input rolesId" type="checkbox"
                                                                            id="rolesId" name="rolesId" value="${r.id}" autofocus 
                                                                            <c:if test="${rolenames.contains(r.name)}">checked=""</c:if>
                                                                                />
@@ -210,6 +213,19 @@
 
                 });
             });
+            document.getElementById("selectAll").onclick = function () {
+                    var check = document.getElementById("selectAll").checked;
+                    var checkboxes = document.getElementsByClassName("rolesId");
+                    if (check === true) {
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            checkboxes[i].checked = true;
+                        }
+                    } else {
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            checkboxes[i].checked = false;
+                        }
+                    }
+                };
         </script>
 
         <script src="${pageContext.request.contextPath}/assets/vendor/libs/jquery/jquery.js"></script>
