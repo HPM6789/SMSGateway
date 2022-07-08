@@ -68,6 +68,7 @@
                     <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
                         <form action="searchShortcode" method="get" style="" name="searchUserForm">
                             <input type="hidden" name="action" value="search"/>
+                            <input type="hidden" name="page" value="${page}"/>
                             <div class="row">
                                 <div class="mb-3 col-md-2">
                                     <input type="text" name="inputSearch" placeholder="Nhập đầu số"
@@ -118,9 +119,9 @@
                                 </div>
                                 <div class="mb-3 col-md-4">
                                     <input type="radio"  id="radioStatus1" name="status" value="1" class="form-check-input"
-                                    <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
+                                    <c:if test="${status.equals('1')}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
                                     <input type="radio"  id="radioStatus0" name="status" value="0" class="form-check-input"
-                                    <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Không hoạt động
+                                    <c:if test="${status.equals('0')}">checked=""</c:if>/>&nbsp;Không hoạt động
                                 </div>
                             </div>
                         </form>
@@ -250,29 +251,29 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
                                             <li class="page-item first">
-                                                <a class="page-link" href="searchShortcode?page=1&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchShortcode?page=1&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevrons-left"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item prev">
-                                                <a class="page-link" href="searchShortcode?page=${(page==1)?1:(page-1)}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchShortcode?page=${(page==1)?1:(page-1)}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevron-left"></i
                                                     ></a>
                                             </li>
                                             <c:forEach var="i" begin="${startDisplayPage}" end="${endDisplayPage}">
                                                 <li class="page-item ${i==page?"active":""}">
-                                                    <a class="page-link" href="searchShortcode?page=${i}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}">
+                                                    <a class="page-link" href="searchShortcode?page=${i}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}">
                                                         ${i}
                                                     </a>
                                                 </li>
                                             </c:forEach>
                                             <li class="page-item next">
-                                                <a class="page-link" href="searchShortcode?page=${(page==endPage)?endPage:(page+1)}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchShortcode?page=${(page==endPage)?endPage:(page+1)}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevron-right"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item last">
-                                                <a class="page-link" href="searchShortcode?page=${endPage}&action=search&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchShortcode?page=${endPage}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
                                                    ><i class="tf-icon bx bx-chevrons-right"></i
                                                     ></a>
                                             </li>

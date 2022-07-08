@@ -77,9 +77,9 @@
                                 </div>
                                 <div class="mb-3 col-md-4">
                                     <input type="radio"  id="radioStatus1" name="status" value="1" class="form-check-input"
-                                           <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
+                                           <c:if test="${status.equals('1')}">checked=""</c:if>/>&nbsp;Hoạt động&nbsp;&nbsp;
                                            <input type="radio"  id="radioStatus0" name="status" value="0" class="form-check-input"
-                                           <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Không hoạt động
+                                           <c:if test="${status.equals('0')}">checked=""</c:if>/>&nbsp;Không hoạt động
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
@@ -90,11 +90,11 @@
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <input type="radio"  id="radioType1" name="userType" value="1" class="form-check-input"
-                                        <c:if test="${userType == 1}">checked=""</c:if>/>&nbsp;CP&nbsp;&nbsp;
+                                        <c:if test="${userType.equals('1')}">checked=""</c:if>/>&nbsp;CP&nbsp;&nbsp;
                                         <input type="radio"  id="radioType0" name="userType" value="0" class="form-check-input"
-                                        <c:if test="${userType == 0}">checked=""</c:if>/>&nbsp;Chưa xác nhận&nbsp;&nbsp;
+                                        <c:if test="${userType.equals('0')}">checked=""</c:if>/>&nbsp;Chưa xác nhận&nbsp;&nbsp;
                                         <input type="radio"  id="radioType2" name="userType" value="2" class="form-check-input"
-                                        <c:if test="${userType == 2}">checked=""</c:if>/>&nbsp;VNP
+                                        <c:if test="${userType.equals('2')}">checked=""</c:if>/>&nbsp;VNP
                                     </div>
                                     <div class="mb-3 col-md-2">
                                         <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>

@@ -15,6 +15,7 @@ import com.mycompany.smsgateway.services.ActionLogServices;
 import com.mycompany.smsgateway.services.Paging;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CmdcodeListController {
 
+    private int numPerPage = 10;
+    
     @Autowired
     private CmdcodeListDAO cmdcodeListDAO;
 
@@ -43,7 +46,7 @@ public class CmdcodeListController {
 
     @Autowired
     private Paging paging;
-    
+
     @Autowired
     private ActionLogServices actionLogServices;
 
@@ -63,7 +66,7 @@ public class CmdcodeListController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
+        
 //        List<CmdcodeListModel> cmds = cmdcodeListDAO.getAllCmdcode();
 //        int totalItem = cmds.size();
         Long total = cmdcodeListDAO.getTotalCmdcode();
@@ -92,8 +95,6 @@ public class CmdcodeListController {
             @RequestParam(required = false) String page, @RequestParam String inputSearch,
             @RequestParam(required = false) String fromCreateDate,
             @RequestParam(required = false) String toCreateDate,
-            @RequestParam(required = false) String fromUpdateDate,
-            @RequestParam(required = false) String toUpdateDate,
             @RequestParam(required = false) String status) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
@@ -108,21 +109,21 @@ public class CmdcodeListController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
+        
         BigInteger statusInt = null;
-        if (status != null && !status.equals("")){
+        if (status != null && !status.equals("")) {
             statusInt = new BigInteger(status);
         }
-        int totalItem = cmdcodeListDAO.getTotalCmdcodeByOption(inputSearch, 
-                fromCreateDate, toCreateDate, fromUpdateDate, toUpdateDate, statusInt).intValue();
+        int totalItem = cmdcodeListDAO.getTotalCmdcodeByOption(inputSearch,
+                fromCreateDate, toCreateDate, statusInt).intValue();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
             endPage++;
         }
         int start = (pageInt - 1) * numPerPage;
 //        int end = Math.min(pageInt * numPerPage, totalItem);
-        List<CmdcodeListModel> cmdPage = cmdcodeListDAO.getCmdcodeByOption(inputSearch, 
-                fromCreateDate, toCreateDate, fromUpdateDate, toUpdateDate, statusInt, start, numPerPage);
+        List<CmdcodeListModel> cmdPage = cmdcodeListDAO.getCmdcodeByOption(inputSearch,
+                fromCreateDate, toCreateDate, statusInt, start, numPerPage);
         int[] startEnd = paging.pageRange(pageInt, endPage);
         model.addAttribute("cmds", cmdPage);
         model.addAttribute("action", action);
@@ -133,8 +134,6 @@ public class CmdcodeListController {
         model.addAttribute("inputSearch", inputSearch);
         model.addAttribute("fromCreateDate", fromCreateDate);
         model.addAttribute("toCreateDate", toCreateDate);
-        model.addAttribute("fromUpdateDate", fromUpdateDate);
-        model.addAttribute("toUpdateDate", toUpdateDate);
         model.addAttribute("status", status);
         return "cmdPages_cmdcodeList";
     }
@@ -268,6 +267,134 @@ public class CmdcodeListController {
         return "redirect:cmdcodeList?action=list&page=" + page;
     }
 
+    @RequestMapping(value = "approveCmdcodes", method = RequestMethod.POST)
+    public String approveCmdcodes(Model model, HttpSession session, @RequestParam String page,
+            @RequestParam(required = false) List<String> cmdIds, HttpServletRequest request) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CMDCODE_UPDATE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        if (cmdIds == null || cmdIds.isEmpty()) {
+            return "redirect:cmdcodeList?action=list&page=" + page;
+        }
+        List<BigDecimal> cmdIdDecs = new ArrayList<>();
+        for (String cmdId : cmdIds) {
+            cmdIdDecs.add(new BigDecimal(cmdId));
+        }
+        int result = cmdcodeListDAO.approveCmdcodes(cmdIdDecs);
+        String actionResult = "";
+        if (result == -1) {
+            actionResult = "Thất bại";
+        } else {
+            actionResult = "Thành Công";
+        }
+        actionLogServices.logAction(userSession.getUserId(), "APPROVE_CMDCODES",
+                "CMDCODE_LIST", BigInteger.ZERO, actionResult, "Duyệt nhiều command code",
+                null, null, request);
+        return "redirect:cmdcodeList?action=list&page=" + page;
+    }
+
+    @RequestMapping(value = "disapproveCmdcodes", method = RequestMethod.POST)
+    public String disapproveCmdcodes(Model model, HttpSession session, @RequestParam String page,
+            @RequestParam(required = false) List<String> cmdIds, HttpServletRequest request) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CMDCODE_UPDATE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        if (cmdIds == null || cmdIds.isEmpty()) {
+            return "redirect:cmdcodeList?action=list&page=" + page;
+        }
+        List<BigDecimal> cmdIdDecs = new ArrayList<>();
+        for (String cmdId : cmdIds) {
+            cmdIdDecs.add(new BigDecimal(cmdId));
+        }
+        int result = cmdcodeListDAO.disapproveCmdcodes(cmdIdDecs);
+        String actionResult = "";
+        if (result == -1) {
+            actionResult = "Thất bại";
+        } else {
+            actionResult = "Thành Công";
+        }
+        actionLogServices.logAction(userSession.getUserId(), "DISAPPROVE_CMDCODES",
+                "CMDCODE_LIST", BigInteger.ZERO, actionResult, "Gỡ duyệt nhiều command code",
+                null, null, request);
+        return "redirect:cmdcodeList?action=list&page=" + page;
+    }
+
+    @RequestMapping(value = "deleteCmdcodes", method = RequestMethod.POST)
+    public String deleteCmdcodes(Model model, HttpSession session, @RequestParam String page,
+            @RequestParam(required = false) List<String> cmdIds, HttpServletRequest request) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CMDCODE_UPDATE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        if(cmdIds == null || cmdIds.isEmpty()) {
+            return "redirect:cmdcodeList?action=list&page=" + page;
+        }
+        List<BigDecimal> cmdIdDecs = new ArrayList<>();
+        for (String cmdId : cmdIds) {
+            cmdIdDecs.add(new BigDecimal(cmdId));
+        }
+        int result = cmdcodeListDAO.deleteCmdcodes(cmdIdDecs);
+        String actionResult = "";
+        if (result == -1) {
+            actionResult = "Thất bại";
+        } else {
+            actionResult = "Thành Công";
+        }
+        actionLogServices.logAction(userSession.getUserId(), "DELETE_CMDCODES",
+                "CMDCODE_LIST", BigInteger.ZERO, actionResult, "Xóa nhiều command code",
+                null, null, request);
+        return "redirect:cmdcodeList?action=list&page=" + page;
+    }
+    
+    @RequestMapping(value = "restoreCmdcodes", method = RequestMethod.POST)
+    public String restoreCmdcodes(Model model, HttpSession session, @RequestParam String page,
+            @RequestParam(required = false) List<String> cmdIds, HttpServletRequest request) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CMDCODE_UPDATE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        if(cmdIds == null || cmdIds.isEmpty()) {
+            return "redirect:cmdcodeList?action=list&page=" + page;
+        }
+        List<BigDecimal> cmdIdDecs = new ArrayList<>();
+        for (String cmdId : cmdIds) {
+            cmdIdDecs.add(new BigDecimal(cmdId));
+        }
+        int result = cmdcodeListDAO.restoreCmdcodes(cmdIdDecs);
+        String actionResult = "";
+        if (result == -1) {
+            actionResult = "Thất bại";
+        } else {
+            actionResult = "Thành Công";
+        }
+        actionLogServices.logAction(userSession.getUserId(), "RESTORE_CMDCODES",
+                "CMDCODE_LIST", BigInteger.ZERO, actionResult, "Khôi phục nhiều command code",
+                null, null, request);
+        return "redirect:cmdcodeList?action=list&page=" + page;
+    }
+
     @RequestMapping(value = "addCmdcode", method = RequestMethod.GET)
     public String addCmdcode(Model model, HttpSession session, @RequestParam String action) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
@@ -365,7 +492,7 @@ public class CmdcodeListController {
         BigInteger shortcodeCpIdInt = new BigInteger(shortcodeCpId);
         Long priceLong = new Long(price);
         Long creatorId = new Long(userSession.getUserId().toString());
-        int result = cmdcodeListDAO.updateCmdcode(cmdIdDec, cmdName, cmdCode, shortcodeCpIdInt, 
+        int result = cmdcodeListDAO.updateCmdcode(cmdIdDec, cmdName, cmdCode, shortcodeCpIdInt,
                 typeCode, priceLong, description, creatorId);
         String actionResult = "";
         if (result == 0) {

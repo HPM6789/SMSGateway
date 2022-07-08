@@ -93,38 +93,25 @@
                                     <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
                                 </div>
                                 <div class="mb-3 col-md-2"></div>
-                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
-                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Cập Nhật: </label>
-                                </div>
-                                <div class="mb-3 col-md-3">
-                                    <label class="form-label" for="">Từ </label>
-                                    <input type="date" name="fromUpdateDate" style="width: auto; display: inline-block;
-                                           margin-left: 10px;"
-                                           id="fromUpdateDate" class="form-control" value="${fromUpdateDate}"/>
-                                </div>
-                                <div class="mb-3 col-md-3">
-                                    <label class="form-label" for="">Đến </label>
-                                    <input type="date" name="toUpdateDate" style="width: auto; display: inline-block;
-                                           margin-left: 10px;" 
-                                           pattern=""
-                                           id="toUpdateDate" class="form-control" value="${toUpdateDate}"/>
-                                </div>
-                                <div class="mb-3 col-md-2">
-                                    <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
-                                </div>
-                                <div class="mb-3 col-md-2"></div>
                                 <div class="mb-3 col-md-2"  style="text-align: right">
                                     <label class="form-label" for="basic-default-status">Trạng Thái</label>
                                 </div>
                                 <div class="mb-3 col-md-4">
                                     <input type="radio"  id="radioStatus1" name="status" value="1" class="form-check-input"
-                                    <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Duyệt&nbsp;&nbsp;
-                                    <input type="radio"  id="radioStatus0" name="status" value="0" class="form-check-input"
-                                    <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Chưa Duyệt&nbsp;&nbsp;
-                                    <input type="radio"  id="radioStatus2" name="status" value="0" class="form-check-input"
-                                    <c:if test="${status == 2}">checked=""</c:if>/>&nbsp;Đã xóa
+                                           <c:if test="${status.equals('1')}">checked=""</c:if>/>&nbsp;Duyệt&nbsp;&nbsp;
+                                           <input type="radio"  id="radioStatus0" name="status" value="0" class="form-check-input"
+                                           <c:if test="${status.equals('0')}">checked=""</c:if>/>&nbsp;Chưa Duyệt&nbsp;&nbsp;
+                                           <input type="radio"  id="radioStatus2" name="status" value="2" class="form-check-input"
+                                           <c:if test="${status.equals('2')}">checked=""</c:if>/>&nbsp;Đã xóa
                                     </div>
+
+                                    <div class="mb-3 col-md-2"></div>
+                                    <div class="mb-3 col-md-2">
+                                        <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
+                                    </div>
+                                    <div class="mb-3 col-md-2"></div>
                                 </div>
+
                             </form>
                         </div>
                         <!-- Bootstrap Table with Header - Light -->
@@ -184,17 +171,48 @@
                                     </div>
                                 </div>
                             </div>
+                            <form method="post" id="selectedForm">
+                                <input type="hidden" name="page" value="${page}"/>
+                            </form>
+                            
                             <table class="table" id="">
                                 <thead class="table-light">
                                     <tr>
-
                                         <th>Tên</th>
                                         <th>Mã</th>
                                         <th>Ngày Khởi Tạo</th>
-                                        <th>Ngày Cập Nhật</th>
+                                        <th>
+                                            <span>
+                                                <input class="form-check-input" type="checkbox" style="float: left;height: 20px; width: 20px"
+                                                       id="selectAll" name="" autofocus/>
+                                                <div class="dropdown" style="float: right;">
+                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <button type="button" class="dropdown-item" class="dropdown-item" 
+                                                                id="approveCmdcodesBtn" onclick="submitApproveForm()">
+                                                            <i class="bx bx-edit-alt me-1"></i> Duyệt
+                                                        </button>
+                                                        <button type="button" class="dropdown-item" class="dropdown-item" 
+                                                                id="disapproveCmdcodesBtn" onclick="submitDisapproveForm()">
+                                                            <i class="bx bx-edit-alt me-1"></i> Gỡ Duyệt
+                                                        </button>
+                                                        <button type="button" class="dropdown-item" class="dropdown-item" 
+                                                                id="deleteCmdcodesBtn" onclick="submitDeleteForm()">
+                                                            <i class="bx bx-edit-alt me-1"></i> Xóa
+                                                        </button>
+                                                        <button type="button" class="dropdown-item" class="dropdown-item" 
+                                                                id="restoreCmdcodesBtn" onclick="submitRestoreForm()">
+                                                            <i class="bx bx-edit-alt me-1"></i> Khôi Phục
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="clear"></div>
+                                            </span>
+                                        </th>
                                         <th>Trạng Thái</th>
                                         <th>Người Tạo</th>
-
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -208,7 +226,10 @@
                                             </td>
                                             <td>${c.cmdCode}</td>
                                             <td><fmt:formatDate value="${c.createTime}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
-                                            <td><fmt:formatDate value="${c.updateTime}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
+                                            <td>
+                                                <input class="form-check-input cmdIds" type="checkbox" form="selectedForm"
+                                                       id="rolesId" name="cmdIds" value="${c.cmdId}" autofocus/>
+                                            </td>
                                             <td>
                                                 <c:if test="${c.status==1}">
                                                     Đã Duyệt
@@ -257,7 +278,7 @@
                                                         </c:if>
                                                         <a class="dropdown-item"
                                                            href="updateCmdcode?action=update&cmdId=${c.cmdId}&page=${page}"
-                                                           ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                                           ><i class="bx bx-edit-alt me-1"></i> Sửa</a
                                                         >
 
                                                     </div>
@@ -267,6 +288,7 @@
                                     </c:forEach>
                                 </tbody>
                             </table>
+
                             <div style="float: right; margin-right: 10%">
                                 <c:if test="${action.equals('list')}">
                                     <nav aria-label="Page navigation">
@@ -369,20 +391,72 @@
             <!-- DataTables -->
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
             <script>
-                                        $(document).ready(function () {
+                                            $(document).ready(function () {
                                             $('#table1').DataTable();
-                                        });
+                                            });
             </script>
             <script>
                 function resetFormSearch() {
                     document.getElementById("inputSearch").value = "";
                     document.getElementById("fromCreateDate").value = "";
                     document.getElementById("toCreateDate").value = "";
-                    document.getElementById("fromUpdateDate").value = "";
-                    document.getElementById("toUpdateDate").value = "";
                     document.getElementById("radioStatus0").checked = false;
                     document.getElementById("radioStatus1").checked = false;
                     document.getElementById("radioStatus2").checked = false;
+                }
+                ;
+                document.getElementById("selectAll").onclick = function () {
+                    var check = document.getElementById("selectAll").checked;
+                    var checkboxes = document.getElementsByClassName("cmdIds");
+                    if (check === true) {
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            checkboxes[i].checked = true;
+                        }
+                    } else {
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            checkboxes[i].checked = false;
+                        }
+                    }
+                };
+                function submitApproveForm(){
+                    var checkboxes = document.getElementsByClassName("cmdIds");
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if(checkboxes[i].checked === true) {
+                            checkboxes[i].form = "approveCmdcodes";
+                        }
+                    }
+                    document.getElementById("selectedForm").action = "approveCmdcodes";
+                    document.getElementById("selectedForm").submit();
+                };
+                function submitDisapproveForm(){
+                    var checkboxes = document.getElementsByClassName("cmdIds");
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if(checkboxes[i].checked === true) {
+                            checkboxes[i].form = "disapproveCmdcodes";
+                        }
+                    }
+                    document.getElementById("selectedForm").action = "disapproveCmdcodes";
+                    document.getElementById("selectedForm").submit();
+                };
+                function submitDeleteForm(){
+                    var checkboxes = document.getElementsByClassName("cmdIds");
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if(checkboxes[i].checked === true) {
+                            checkboxes[i].form = "deleteCmdcodes";
+                        }
+                    }
+                    document.getElementById("selectedForm").action = "deleteCmdcodes";
+                    document.getElementById("selectedForm").submit();
+                };
+                function submitRestoreForm(){
+                    var checkboxes = document.getElementsByClassName("cmdIds");
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if(checkboxes[i].checked === true) {
+                            checkboxes[i].form = "restoreCmdcodes";
+                        }
+                    }
+                    document.getElementById("selectedForm").action = "restoreCmdcodes";
+                    document.getElementById("selectedForm").submit();
                 };
             </script>
             <style>

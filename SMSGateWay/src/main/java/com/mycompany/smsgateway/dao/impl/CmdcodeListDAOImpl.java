@@ -118,7 +118,7 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
 
     @Override
     public List<CmdcodeListModel> getCmdcodeByOption(String inputSearch, String fromCreateDate,
-            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status,
+            String toCreateDate, BigInteger status,
             int start, int next) {
         String sql = "select new " + CmdcodeListModel.class.getName()
                 + "(c.cmdId, c.cmdName, c.cmdCode, c.shortcodeCp.shortcodeCpId, c.updateTime, c.createTime, "
@@ -140,12 +140,6 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
         }
         if (toCreateDate != null && !toCreateDate.equals("")) {
             sql += " and c.createTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
-        }
-        if (fromUpdateDate != null && !fromUpdateDate.equals("")) {
-            sql += " and c.updateTime >= to_date('" + fromUpdateDate + "','yyyy/MM/dd')";
-        }
-        if (toUpdateDate != null && !toUpdateDate.equals("")) {
-            sql += " and c.updateTime <= to_date('" + toUpdateDate + "','yyyy/MM/dd')";
         }
         if (status != null) {
             sql += " and c.status = " + status;
@@ -245,7 +239,7 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
 
     @Override
     public Long getTotalCmdcodeByOption(String inputSearch, String fromCreateDate,
-            String toCreateDate, String fromUpdateDate, String toUpdateDate, BigInteger status) {
+            String toCreateDate, BigInteger status) {
         String sql = "select count(c)"
                 + " from " + CmdcodeList.class.getName() + " c where 1=1";
         if (inputSearch != null && !inputSearch.equals("")) {
@@ -257,12 +251,6 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
         }
         if (toCreateDate != null && !toCreateDate.equals("")) {
             sql += " and c.createTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
-        }
-        if (fromUpdateDate != null && !fromUpdateDate.equals("")) {
-            sql += " and c.updateTime >= to_date('" + fromUpdateDate + "','yyyy/MM/dd')";
-        }
-        if (toUpdateDate != null && !toUpdateDate.equals("")) {
-            sql += " and c.updateTime <= to_date('" + toUpdateDate + "','yyyy/MM/dd')";
         }
         if (status != null) {
             sql += " and c.status = " + status;
@@ -294,7 +282,35 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
     }
 
     @Override
-    public int approveCmdcode(BigDecimal cmdId) {
+    public int approveCmdcodes(List<BigDecimal> cmdIds) {
+        String sql = "update cmdcode_list set status ="
+                + " case"
+                + " when status <> 2 then :status "
+                + " when status = 2 then 2"
+                + " end"
+                + " where cmd_id in (";
+        for (int i = 0; i < cmdIds.size(); i++) {
+            sql += cmdIds.get(i).toString();
+            if (i < cmdIds.size() - 1) {
+                sql += ",";
+            }
+        }
+        sql += ")";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("status", 1);
+            int rows = query.executeUpdate();
+            return rows;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+    }
+
+    @Override
+    public int approveCmdcode(BigDecimal cmdId
+    ) {
         String sql = "update cmdcode_list set status = :status where cmd_id = :cmdId";
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -326,6 +342,33 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
     }
 
     @Override
+    public int disapproveCmdcodes(List<BigDecimal> cmdIds) {
+        String sql = "update cmdcode_list set status ="
+                + " case"
+                + " when status <> 2 then :status "
+                + " when status = 2 then 2"
+                + " end"
+                + " where cmd_id in (";
+        for (int i = 0; i < cmdIds.size(); i++) {
+            sql += cmdIds.get(i).toString();
+            if (i < cmdIds.size() - 1) {
+                sql += ",";
+            }
+        }
+        sql += ")";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("status", 0);
+            int rows = query.executeUpdate();
+            return rows;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+    }
+
+    @Override
     public int deleteCmdcode(BigDecimal cmdId) {
         String sql = "update cmdcode_list set status = :status where cmd_id = :cmdId";
         try {
@@ -338,6 +381,33 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
         } catch (Exception ex) {
             Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
+        }
+    }
+
+    @Override
+    public int deleteCmdcodes(List<BigDecimal> cmdIds) {
+        String sql = "update cmdcode_list set status ="
+                + " case"
+                + " when status <> 2 then :status "
+                + " when status = 2 then 2"
+                + " end"
+                + " where cmd_id in (";
+        for (int i = 0; i < cmdIds.size(); i++) {
+            sql += cmdIds.get(i).toString();
+            if (i < cmdIds.size() - 1) {
+                sql += ",";
+            }
+        }
+        sql += ")";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("status", 2);
+            int rows = query.executeUpdate();
+            return rows;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
         }
     }
 
@@ -358,8 +428,36 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
     }
 
     @Override
+    public int restoreCmdcodes(List<BigDecimal> cmdIds) {
+        String sql = "update cmdcode_list set status ="
+                + " case"
+                + " when status = 2 then :status "
+                + " when status = 1 then 1"
+                + " when status = 0 then 0"
+                + " end"
+                + " where cmd_id in (";
+        for (int i = 0; i < cmdIds.size(); i++) {
+            sql += cmdIds.get(i).toString();
+            if (i < cmdIds.size() - 1) {
+                sql += ",";
+            }
+        }
+        sql += ")";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("status", 0);
+            int rows = query.executeUpdate();
+            return rows;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return -1;
+        }
+    }
+
+    @Override
     public int addNewCmdcode(String cmdName, String cmdCode, BigInteger shortcodeCpId,
-            String typeCode, Long price, String description, Long creatorId) {
+            String typeCode,Long price, String description, Long creatorId) {
         String sql = "insert into cmdcode_list (cmd_id, cmd_name, cmd_code, shortcode_cp_id,"
                 + "create_time, status, type_code, price, creator_id, description)"
                 + " values (SEQ_CMDCODE.nextval, :cmdName, :cmdCode, :shortcodeCpId,"
@@ -385,8 +483,11 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
     }
 
     @Override
-    public int updateCmdcode(BigDecimal cmdId, String cmdName, String cmdCode, BigInteger shortcodeCpId,
-            String typeCode, Long price, String description, Long creatorId) {
+    public int updateCmdcode(BigDecimal cmdId, String cmdName,
+            String cmdCode, BigInteger shortcodeCpId,
+            String typeCode, Long price,
+            String description, Long creatorId
+    ) {
         String sql = "update cmdcode_list set cmd_name = :cmdName, cmd_code = :cmdCode,"
                 + " shortcode_cp_id = :shortcodeCpId, type_code = :typeCode, update_time = :updateTime,"
                 + " price = :price, description = :description, creator_id = :creatorId"

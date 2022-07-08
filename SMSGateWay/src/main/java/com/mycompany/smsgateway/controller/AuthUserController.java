@@ -113,10 +113,10 @@ public class AuthUserController {
         int numPerPage = 10;
         BigInteger statusInt = null;
         BigInteger userTypeInt = null;
-        if (status != null) {
+        if (status != null && !status.equals("")) {
             statusInt = new BigInteger(status);
         }
-        if( userType !=null) {
+        if( userType !=null && !userType.equals("")) {
             userTypeInt = new BigInteger(userType);
         }
         List<AuthUserModel> users = authUserDAO.getUserByOption(inputSearch, statusInt, userTypeInt);
