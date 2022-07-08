@@ -105,7 +105,10 @@ public class CpList implements Serializable {
     private String emailCp;
     
     @OneToMany(mappedBy = "cp")
-    List<ShortcodeCp> shortcodeCps;
+    private List<ShortcodeCp> shortcodeCps;
+    
+    @OneToMany(mappedBy = "cpInClient")
+    private List<ClientTps> clientTps;
     
     public CpList() {
     }
@@ -117,6 +120,14 @@ public class CpList implements Serializable {
     public CpList(BigDecimal cpId, String cpName) {
         this.cpId = cpId;
         this.cpName = cpName;
+    }
+
+    public List<ClientTps> getClientTps() {
+        return clientTps;
+    }
+
+    public void setClientTps(List<ClientTps> clientTps) {
+        this.clientTps = clientTps;
     }
 
     public List<ShortcodeCp> getShortcodeCps() {

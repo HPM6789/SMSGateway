@@ -60,11 +60,22 @@ public class ShortcodeCp implements Serializable {
     @JoinColumn(name = "SHCODE_ID")
     private ShortcodeList shortcode;
     
+    @OneToMany(mappedBy = "shcodeCpInCLient")
+    private List<ClientTps> clientTps;
+    
     public ShortcodeCp() {
     }
 
     public ShortcodeCp(BigDecimal shortcodeCpId) {
         this.shortcodeCpId = shortcodeCpId;
+    }
+
+    public List<ClientTps> getClientTps() {
+        return clientTps;
+    }
+
+    public void setClientTps(List<ClientTps> clientTps) {
+        this.clientTps = clientTps;
     }
 
     public ShortcodeList getShortcode() {

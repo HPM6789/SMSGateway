@@ -136,6 +136,14 @@
                     </a>
                 </li>
             </c:if>
+            <c:if test="${roleUser.contains('CMDCODE_LIST')}">
+                <li class="menu-item ">
+                    <a href="clientTpsList?action=list" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                        <div data-i18n="Analytics">TPS</div>
+                    </a>
+                </li>
+            </c:if>
             <c:if test="${roleUser.contains('TYPE_LIST')}">
                 <li class="menu-item ">
                     <a href="typelist?action=list" class="menu-link">
