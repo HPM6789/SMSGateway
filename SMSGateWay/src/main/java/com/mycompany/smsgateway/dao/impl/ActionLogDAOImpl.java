@@ -89,6 +89,43 @@ public class ActionLogDAOImpl implements ActionLogDAO {
     }
 
     @Override
+    public List<ActionLogModel> getAllActionsByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String actionResult, int start, int next) {
+        String sql = "select new " + ActionLogModel.class.getName()
+                + "(a.actionlogId, a.user.userId, a.user.userName, a.user.userFullname, a.actionlogName, "
+                + "a.actionlogObjectType, a.actionlogObjectId, a.actionlogIp, "
+                + "a.actionlogDevice, a.actionlogOs, a.actionlogApp, a.actionlogTime, "
+                + "a.actionlogResult, a.actionlogDesc, a.actionlogData, "
+                + "a.actionlogMsisdn)"
+                + " from " + ActionLog.class.getName() + " a "
+                + " left join a.user where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and upper(a.actionlogName) like upper('%" + inputSearch + "%')";
+        }
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and a.actionlogTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
+        }
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and a.actionlogTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
+        }
+        if (actionResult != null && !actionResult.equals("")) {
+            sql += " and a.actionlogResult like '" + actionResult + "'";
+        }
+        sql += " order by a.actionlogTime desc";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            query.setFirstResult(start);
+            query.setMaxResults(next);
+            List<ActionLogModel> logs = query.list();
+            return logs;
+        } catch (Exception ex) {
+            Logger.getLogger(ActionLogDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public ActionLogModel getActionLogById(BigDecimal actionlogId) {
         String sql = "select new " + ActionLogModel.class.getName()
                 + "(a.actionlogId, a.user.userId, a.user.userName, a.user.userFullname, a.actionlogName, "
@@ -170,6 +207,35 @@ public class ActionLogDAOImpl implements ActionLogDAO {
                 + " where 1=1";
         if (actionlogName != null && !actionlogName.equals("")) {
             sql += " and upper(a.actionlogName) like upper('%" + actionlogName + "%')";
+        }
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            Long total = (Long) query.uniqueResult();
+            return total;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return new Long("0");
+        }
+    }
+
+    @Override
+    public Long getTotalActionLogsByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String actionResult) {
+        String sql = "select count(a)"
+                + " from " + ActionLog.class.getName() + " a "
+                + " where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and upper(a.actionlogName) like upper('%" + inputSearch + "%')";
+        }
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and a.actionlogTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
+        }
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and a.actionlogTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
+        }
+        if (actionResult != null && !actionResult.equals("")) {
+            sql += " and a.actionlogResult like '" + actionResult + "'";
         }
         try {
             Session session = sessionFactory.getCurrentSession();

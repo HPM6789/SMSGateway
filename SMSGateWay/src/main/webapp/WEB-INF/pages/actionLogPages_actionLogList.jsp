@@ -66,11 +66,46 @@
                 <%@include file="sidebar.jsp" %>
                 <div class="layout-page">
                     <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
-                        <form action="searchAction" method="get" style="width: 20%" name="">
-                            <input type="hidden" name="action" value="search"/>
-                            <input type="text" name="actionlogName" placeholder="Tên Log"
-                                   id="" class="form-control" value="${actionlogName}"/>
-                            <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                        <form action="searchAction" method="get" style="" name="">
+                            <div class="row">
+                                <input type="hidden" name="action" value="search"/>
+                                <div class="mb-3 col-md-2">
+                                    <input type="text" name="inputSearch" placeholder="Tên Log"
+                                           id="inputSearch" class="form-control" value="${inputSearch}"/>
+                                </div>
+                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
+                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Tạo: </label>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Từ </label>
+                                    <input type="date" name="fromCreateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="fromCreateDate" class="form-control" value="${fromCreateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label" for="">Đến </label>
+                                    <input type="date" name="toCreateDate" style="width: auto; display: inline-block;
+                                           margin-left: 10px;"
+                                           id="toCreateDate" class="form-control" value="${toCreateDate}"/>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
+                                </div>
+                                <div class="mb-3 col-md-2"></div>
+                                <div class="mb-3 col-md-2"  style="text-align: right">
+                                    <label class="form-label" for="basic-default-status">Kết quả</label>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <input type="radio"  id="radioStatus1" name="actionResult" value="Thành Công" class="form-check-input"
+                                    <c:if test="${actionResult.equals('Thành Công')}">checked=""</c:if>/>&nbsp;Thành Công&nbsp;&nbsp;
+                                    <input type="radio"  id="radioStatus0" name="actionResult" value="Thất bại" class="form-check-input"
+                                    <c:if test="${actionResult.equals('Thất bại')}">checked=""</c:if>/>&nbsp;Thất bại
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                <div class="mb-3 col-md-2">
+                                    <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <!-- Bootstrap Table with Header - Light -->
@@ -154,29 +189,29 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
                                             <li class="page-item first">
-                                                <a class="page-link" href="searchAction?page=1&actionlogName=${actionlogName}&action=search"
+                                                <a class="page-link" href="searchAction?page=1&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&actionResult=${actionResult}"
                                                    ><i class="tf-icon bx bx-chevrons-left"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item prev">
-                                                <a class="page-link" href="searchAction?page=${(page==1)?1:(page-1)}&actionlogName=${actionlogName}&action=search"
+                                                <a class="page-link" href="searchAction?page=${(page==1)?1:(page-1)}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&actionResult=${actionResult}"
                                                    ><i class="tf-icon bx bx-chevron-left"></i
                                                     ></a>
                                             </li>
                                             <c:forEach var="i" begin="${startDisplayPage}" end="${endDisplayPage}">
                                                 <li class="page-item ${i==page?"active":""}">
-                                                    <a class="page-link" href="searchAction?page=${i}&actionlogName=${actionlogName}&action=search">
+                                                    <a class="page-link" href="searchAction?page=${i}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&actionResult=${actionResult}">
                                                         ${i}
                                                     </a>
                                                 </li>
                                             </c:forEach>
                                             <li class="page-item next">
-                                                <a class="page-link" href="searchAction?page=${(page==endPage)?endPage:(page+1)}&actionlogName=${actionlogName}&action=search"
+                                                <a class="page-link" href="searchAction?page=${(page==endPage)?endPage:(page+1)}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&actionResult=${actionResult}"
                                                    ><i class="tf-icon bx bx-chevron-right"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item last">
-                                                <a class="page-link" href="searchAction?page=${endPage}&actionlogName=${actionlogName}&action=search"
+                                                <a class="page-link" href="searchAction?page=${endPage}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&actionResult=${actionResult}"
                                                    ><i class="tf-icon bx bx-chevrons-right"></i
                                                     ></a>
                                             </li>
@@ -218,9 +253,13 @@
             <!-- DataTables -->
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
             <script>
-                $(document).ready(function () {
-                    $('#table1').DataTable();
-                });
+                function resetFormSearch() {
+                    document.getElementById("inputSearch").value = "";
+                    document.getElementById("fromCreateDate").value = "";
+                    document.getElementById("toCreateDate").value = "";
+                    document.getElementById("radioStatus1").checked = false;
+                    document.getElementById("radioStatus0").checked = false;
+                };
             </script>
 
             <style>

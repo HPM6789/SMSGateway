@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ActionLogController {
     
+    private int numPerPage = 10;
+    
     @Autowired
     private ActionLogDAO actionLogDAO;
     
@@ -42,7 +44,6 @@ public class ActionLogController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         Long total = actionLogDAO.getTotalActionLogs();
         int totalItem = total.intValue();
         int endPage = totalItem / numPerPage;
@@ -64,7 +65,10 @@ public class ActionLogController {
     
     @RequestMapping(value = "searchAction", method = RequestMethod.GET)
     public String searchAction(Model model, HttpSession session, @RequestParam String action,
-            @RequestParam(required = false) String page, @RequestParam String actionlogName) {
+            @RequestParam(required = false) String page, @RequestParam String inputSearch,
+            @RequestParam(required = false) String fromCreateDate,
+            @RequestParam(required = false) String toCreateDate,
+            @RequestParam(required = false) String actionResult) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -73,15 +77,16 @@ public class ActionLogController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
-        Long total = actionLogDAO.getTotalActionLogsByName(actionlogName);
+        Long total = actionLogDAO.getTotalActionLogsByOption(inputSearch, 
+                fromCreateDate, toCreateDate, actionResult);
         int totalItem = total.intValue();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
             endPage++;
         }
         int start = (pageInt - 1) * numPerPage;
-        List<ActionLogModel> logs = actionLogDAO.getAllActionsByName(actionlogName, start, numPerPage);
+        List<ActionLogModel> logs = actionLogDAO.getAllActionsByOption(inputSearch, 
+                fromCreateDate, toCreateDate, actionResult, start, numPerPage);
         int[] startEnd = paging.pageRange(pageInt, endPage);
         model.addAttribute("logs", logs);
         model.addAttribute("action", action);
@@ -89,7 +94,10 @@ public class ActionLogController {
         model.addAttribute("page", page);
         model.addAttribute("startDisplayPage", startEnd[0]);
         model.addAttribute("endDisplayPage", startEnd[1]);
-        model.addAttribute("actionlogName", actionlogName);
+        model.addAttribute("inputSearch", inputSearch);
+        model.addAttribute("fromCreateDate", fromCreateDate);
+        model.addAttribute("toCreateDate", toCreateDate);
+        model.addAttribute("actionResult", actionResult);
         return "actionLogPages_actionLogList";
     }
     

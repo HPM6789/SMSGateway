@@ -22,6 +22,9 @@ public interface ActionLogDAO {
     
     public List<ActionLogModel> getAllActionsByName(String actionlogName, int start, int next);
     
+    public List<ActionLogModel> getAllActionsByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String actionResult, int start, int next);
+    
     public ActionLogModel getActionLogById(BigDecimal actionlogId);
     
     public int addUserAction(BigInteger userId, String actionlogName, String actionlogObjectType, 
@@ -32,5 +35,8 @@ public interface ActionLogDAO {
     public Long getTotalActionLogs();
     
     public Long getTotalActionLogsByName(String actionlogName);
+    
+    public Long getTotalActionLogsByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, String actionResult);
     
 }
