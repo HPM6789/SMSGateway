@@ -22,7 +22,7 @@
             content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
             />
 
-        <title>Danh sách người dùng</title>
+        <title>Danh sách TPS</title>
 
         <meta name="description" content="" />
 
@@ -64,32 +64,25 @@
             <div class="layout-container">
                 <%@include file="sidebar.jsp" %>
                 <div class="layout-page">
-                    <div class="card" style="margin-bottom: 10px; padding: 10px 0 10px 10px;">
-                        <form action="" method="get" style="" name="" id="formSearch">
-                            <div class="row">
-                                <div class="mb-3 col-md-4">
-                                    <input type="hidden" name="action" value="search"/>
-                                    <input type="text" name="inputSearch" placeholder=""
-                                           id="inputSearch" class="form-control" value="${inputSearch}"/>
-                                </div>
-                                <div class="mb-3 col-md-6">
 
-                                </div>
-                                <div class="mb-3 col-md-2">
-                                    <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
-                                </div>
-                                <div class="mb-3 col-md-10"></div>
-
-                                <div class="mb-3 col-md-2">
-                                    <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                     <!-- Bootstrap Table with Header - Light -->
                     <div class="card">
-                        <h5 class="card-header">Danh sách người dùng</h5>
+                        <h5 class="card-header">Danh sách TPS</h5>
                         <div class="table-responsive text-nowrap">
+                            <div class="row" style="margin-bottom: 10px; margin-left: 10px">
+                                <div class="col-md-2">
+                                    <a href="#" style="color: inherit; text-decoration: none">
+                                        <button class="btn btn-primary me-2">
+                                            Thêm Mới TPS
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="col-md-3" style="text-align: center">
+                                    <c:if test="${notice.equals('success')}">
+                                        <div class="alert alert-success" role="alert">Thêm Thành Công</div>
+                                    </c:if>
+                                </div>
+                            </div>
                             <table class="table" >
                                 <thead class="table-light">
                                     <tr>
@@ -270,17 +263,12 @@
         <!-- DataTables -->
         <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
         <script>
-                                            $(document).ready(function () {
-                                                $('#table1').DataTable();
-                                            });
+            $(document).ready(function () {
+                $('#table1').DataTable();
+            });
         </script>
         <script>
-            function resetFormSearch() {
-                document.getElementById("inputSearch").value = "";
-                document.getElementById("radioStatus0").checked = false;
-                document.getElementById("radioStatus1").checked = false;
-            }
-            ;
+
         </script>
         <style>
             .dataTables_filter, .dataTables_info {

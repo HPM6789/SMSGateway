@@ -30,14 +30,14 @@ public class ClientTpsDAOImpl implements ClientTpsDAO {
 
     @Override
     public List<ClientTpsModel> getAllClientTps(int start, int next) {
-        String sql = "select new" + ClientTpsModel.class.getName()
+        String sql = "select new " + ClientTpsModel.class.getName()
                 + "(c.clientId, c.tps, c.updateFlg,"
-                + "c.note, c.cpInClient.cpId, c.cpInClient.cpName,"
-                + "c.cpInClient.cpCode, c.shcodeCpInCLient.shortcodeCpId,"
+                + "c.note, cp.cpId, cp.cpName,"
+                + "cp.cpCode, q.shortcodeCpId,"
                 + "p.shcodeId, p.shortcode)"
                 + " from " + ClientTps.class.getName() + " c "
-                + " left join c.cpInClient"
-                + " left join c.shcodeCpInCLient"
+                + " left join c.cpInClient cp"
+                + " left join c.shcodeCpInCLient q"
                 + " left join c.shcodeCpInCLient.shortcode p";
         try {
             Session session = sessionFactory.getCurrentSession();
