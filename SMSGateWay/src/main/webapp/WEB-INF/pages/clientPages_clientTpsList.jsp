@@ -71,7 +71,7 @@
                         <div class="table-responsive text-nowrap">
                             <div class="row" style="margin-bottom: 10px; margin-left: 10px">
                                 <div class="col-md-2">
-                                    <a href="#" style="color: inherit; text-decoration: none">
+                                    <a href="addClientTps?action=add" style="color: inherit; text-decoration: none">
                                         <button class="btn btn-primary me-2">
                                             Thêm Mới TPS
                                         </button>

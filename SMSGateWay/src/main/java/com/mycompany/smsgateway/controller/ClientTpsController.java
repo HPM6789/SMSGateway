@@ -4,11 +4,19 @@
  */
 package com.mycompany.smsgateway.controller;
 
+import com.mycompany.smsgateway.dao.CPListDAO;
 import com.mycompany.smsgateway.dao.ClientTpsDAO;
+import com.mycompany.smsgateway.dao.ShortcodeCpDAO;
 import com.mycompany.smsgateway.model.AuthUserModel;
 import com.mycompany.smsgateway.model.ClientTpsModel;
+import com.mycompany.smsgateway.model.CpListModel;
+import com.mycompany.smsgateway.model.ShortcodeCpModel;
+import com.mycompany.smsgateway.services.ActionLogServices;
 import com.mycompany.smsgateway.services.Paging;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,15 +31,24 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class ClientTpsController {
-    
+
     private int numPerPage = 10;
-    
+
     @Autowired
     private ClientTpsDAO clientTpsDAO;
-    
+
     @Autowired
     private Paging paging;
-    
+
+    @Autowired
+    private CPListDAO cpListDAO;
+
+    @Autowired
+    private ShortcodeCpDAO shortcodeCpDAO;
+
+    @Autowired
+    private ActionLogServices actionLogServices;
+
     @RequestMapping(value = "clientTpsList", method = RequestMethod.GET)
     public String clientTpsList(Model model, HttpSession session, @RequestParam String action,
             @RequestParam(required = false) String page, @RequestParam(required = false) String notice) {
@@ -65,5 +82,86 @@ public class ClientTpsController {
         model.addAttribute("endDisplayPage", startEnd[1]);
         model.addAttribute("notice", notice);
         return "clientPages_clientTpsList";
+    }
+
+    @RequestMapping(value = "addClientTps", method = RequestMethod.GET)
+    public String addClientTps(Model model, HttpSession session, @RequestParam String action) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CLIENT_TPS_INSERT")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        List<CpListModel> cps = cpListDAO.getAllCpList();
+        List<ShortcodeCpModel> shcodeCps = shortcodeCpDAO.getAllShortcodeCp();
+
+        model.addAttribute("cps", cps);
+        model.addAttribute("shcodeCps", shcodeCps);
+        model.addAttribute("action", action);
+        return "clientPages_clientTpsDetail";
+    }
+
+    @RequestMapping(value = "addClientTps", method = RequestMethod.POST)
+    public String addClientTps(Model model, HttpSession session, HttpServletRequest request,
+            @RequestParam String tps, @RequestParam String note, @RequestParam String action,
+            @RequestParam String cpId, @RequestParam String shcodeCpId) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CLIENT_TPS_INSERT")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigInteger tpsInt = new BigInteger(tps);
+        BigInteger cpIdInt = new BigInteger(cpId);
+        BigInteger shcodeCpIdInt = new BigInteger(shcodeCpId);
+        int result = clientTpsDAO.addClientTps(tpsInt, note, cpIdInt, shcodeCpIdInt);
+        String actionResult = "";
+        if (result == 1) {
+            actionResult = "Thành Công";
+        } else {
+            actionResult = "Thất bại";
+        }
+        BigDecimal newestId = clientTpsDAO.getNewestId();
+        actionLogServices.logAction(userSession.getUserId(), "INSERT_CLIENT_TPS",
+                "CLIENT_TPS", newestId.toBigInteger(), actionResult, "Thêm client tps",
+                null, null, request);
+
+        if (result == 1) {
+            return "redirect:clientTpsList?action=list&notice=success";
+        }
+        model.addAttribute("action", action);
+        model.addAttribute("tps", tps);
+        model.addAttribute("note", note);
+        model.addAttribute("cpId", cpId);
+        model.addAttribute("shcodeCpId", shcodeCpId);
+        model.addAttribute("notice", "Thêm thất bại");
+        return "";
+    }
+
+    @RequestMapping(value = "updateClientTps", method = RequestMethod.GET)
+    public String updateClientTps(Model model, HttpSession session, @RequestParam String action,
+            @RequestParam String clientId) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CLIENT_TPS_INSERT")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        List<CpListModel> cps = cpListDAO.getAllCpList();
+        List<ShortcodeCpModel> shcodeCps = shortcodeCpDAO.getAllShortcodeCp();
+
+        model.addAttribute("cps", cps);
+        model.addAttribute("shcodeCps", shcodeCps);
+        model.addAttribute("action", action);
+        return "clientPages_clientTpsDetail";
     }
 }

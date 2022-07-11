@@ -7,10 +7,13 @@ package com.mycompany.smsgateway.dao.impl;
 import com.mycompany.smsgateway.dao.ClientTpsDAO;
 import com.mycompany.smsgateway.entities.ClientTps;
 import com.mycompany.smsgateway.model.ClientTpsModel;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +56,46 @@ public class ClientTpsDAOImpl implements ClientTpsDAO {
     }
 
     @Override
+    public BigDecimal getNewestId() {
+        String sql = "select c.clientId"
+                + " from " + ClientTps.class.getName() + " c ";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+
+            BigDecimal id = (BigDecimal) query.uniqueResult();
+            return id;
+        } catch (Exception ex) {
+            Logger.getLogger(ClientTpsDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return new BigDecimal("0");
+        }
+    }
+
+    @Override
+    public ClientTpsModel findClientTpsById(BigDecimal clientId) {
+        String sql = "select new " + ClientTpsModel.class.getName()
+                + "(c.clientId, c.tps, c.updateFlg,"
+                + "c.note, cp.cpId, cp.cpName,"
+                + "cp.cpCode, q.shortcodeCpId,"
+                + "p.shcodeId, p.shortcode)"
+                + " from " + ClientTps.class.getName() + " c "
+                + " left join c.cpInClient cp"
+                + " left join c.shcodeCpInCLient q"
+                + " left join c.shcodeCpInCLient.shortcode p"
+                + " where c.clientId = :clientId";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            query.setParameter("clientId", clientId);
+            ClientTpsModel client = (ClientTpsModel) query.uniqueResult();
+            return client;
+        } catch (Exception ex) {
+            Logger.getLogger(ClientTpsDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public Long getTotalClientTps() {
         String sql = "select count(c)"
                 + " from " + ClientTps.class.getName() + " c ";
@@ -65,6 +108,38 @@ public class ClientTpsDAOImpl implements ClientTpsDAO {
             Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
             return new Long("0");
         }
+    }
+
+    @Override
+    public int addClientTps(BigInteger tps, String note, BigInteger cpId,
+            BigInteger shcodeId) {
+        String sql = "insert into client_tps (client_id, tps, update_flg, note, cp_id, shcode_id)"
+                + " values(SEQ_CLIENT_TPS.nextval, :tps, :updateFlg, :note, :cpId, :shcodeId)";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("tps", tps);
+            query.setParameter("updateFlg", "0");
+            query.setParameter("note", note);
+            query.setParameter("cpId", cpId);
+            query.setParameter("shcodeId", shcodeId);
+            int rows = query.executeUpdate();
+            return rows;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
+
+    @Override
+    public int updateClientTps(BigDecimal clientId, BigInteger tps, String note,
+            BigInteger cpId, BigInteger shcodeId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int deleteClientTps(BigDecimal clientId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
