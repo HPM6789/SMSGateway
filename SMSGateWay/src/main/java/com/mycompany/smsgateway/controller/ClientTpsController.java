@@ -152,16 +152,101 @@ public class ClientTpsController {
             return "login";
         }
         List<String> roles = (List<String>) session.getAttribute("roleUser");
-        if (!roles.contains("CLIENT_TPS_INSERT")) {
+        if (!roles.contains("CLIENT_TPS_UPDATE") && !roles.contains("CLIENT_TPS_DETAIL")) {
             model.addAttribute("message", "This page is protected!");
             return "accessDeniedPage";
         }
+        BigDecimal clientIdDec = new BigDecimal(clientId);
+        ClientTpsModel client = clientTpsDAO.findClientTpsById(clientIdDec);
         List<CpListModel> cps = cpListDAO.getAllCpList();
         List<ShortcodeCpModel> shcodeCps = shortcodeCpDAO.getAllShortcodeCp();
-
+        
         model.addAttribute("cps", cps);
         model.addAttribute("shcodeCps", shcodeCps);
+        model.addAttribute("clientId", client.getClientId());
+        model.addAttribute("tps", client.getTps());
+        model.addAttribute("note", client.getNote());
+        model.addAttribute("cpId", client.getCpId());
+        model.addAttribute("shcodeCpId", client.getShcodeId());
         model.addAttribute("action", action);
         return "clientPages_clientTpsDetail";
+    }
+    
+    @RequestMapping(value = "updateClientTps", method = RequestMethod.POST)
+    public String updateClientTps(Model model, HttpSession session, @RequestParam String action,
+            @RequestParam String clientId, HttpServletRequest request,
+            @RequestParam String tps, @RequestParam String note,
+            @RequestParam String cpId, @RequestParam String shcodeCpId){
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CLIENT_TPS_UPDATE") && !roles.contains("CLIENT_TPS_DETAIL")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal clientIdDec = new BigDecimal(clientId);
+        BigInteger tpsInt = new BigInteger(tps);
+        BigInteger cpIdInt = new BigInteger(cpId);
+        BigInteger shcodeCpIdInt = new BigInteger(shcodeCpId);
+        int result = clientTpsDAO.updateClientTps(clientIdDec, tpsInt, note, cpIdInt, shcodeCpIdInt);
+        String actionResult = "";
+        if (result == 1) {
+            actionResult = "Thành Công";
+        } else {
+            actionResult = "Thất bại";
+        }
+        actionLogServices.logAction(userSession.getUserId(), "UPDATE_CLIENT_TPS",
+                "CLIENT_TPS", clientIdDec.toBigInteger(), actionResult, "Cập nhật client tps",
+                null, null, request);
+        if(result == 1) {
+            model.addAttribute("notice", "Cập nhật thành công");
+        } else {
+            model.addAttribute("notice", "Cập nhật thất bại");
+        }
+        List<CpListModel> cps = cpListDAO.getAllCpList();
+        List<ShortcodeCpModel> shcodeCps = shortcodeCpDAO.getAllShortcodeCp();
+        
+        model.addAttribute("cps", cps);
+        model.addAttribute("shcodeCps", shcodeCps);
+        model.addAttribute("clientId", clientId);
+        model.addAttribute("tps", tps);
+        model.addAttribute("note", note);
+        model.addAttribute("cpId", cpId);
+        model.addAttribute("shcodeCpId", shcodeCpId);
+        model.addAttribute("action", action);
+        return "clientPages_clientTpsDetail";
+    }
+    
+    @RequestMapping(value = "deleteClientTps", method = RequestMethod.GET)
+    public String deleteClientTps(Model model, HttpSession session, HttpServletRequest request,
+            @RequestParam String clientId){
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CLIENT_TPS_DELETE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal clientIdDec = new BigDecimal(clientId);
+        int result = clientTpsDAO.deleteClientTps(clientIdDec);
+        String actionResult = "";
+        if (result == 1) {
+            actionResult = "Thành Công";
+        } else {
+            actionResult = "Thất bại";
+        }
+        actionLogServices.logAction(userSession.getUserId(), "DELETE_CLIENT_TPS",
+                "CLIENT_TPS", clientIdDec.toBigInteger(), actionResult, "Xóa client tps",
+                null, null, request);
+        if(result == 1) {
+            model.addAttribute("notice", "Cập nhật thành công");
+        } else {
+            model.addAttribute("notice", "Cập nhật thất bại");
+        }
+        return"redirect:clientTpsList?action=list";
     }
 }

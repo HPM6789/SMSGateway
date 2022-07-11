@@ -134,12 +134,39 @@ public class ClientTpsDAOImpl implements ClientTpsDAO {
     @Override
     public int updateClientTps(BigDecimal clientId, BigInteger tps, String note,
             BigInteger cpId, BigInteger shcodeId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "update client_tps set tps = :tps, update_flg = :updateFlg, "
+                + " note = :note, cp_id = :cpId, shcode_id = :shcodeId"
+                + " where client_id = :clientId";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("tps", tps);
+            query.setParameter("updateFlg", "0");
+            query.setParameter("note", note);
+            query.setParameter("cpId", cpId);
+            query.setParameter("shcodeId", shcodeId);
+            query.setParameter("clientId", clientId);
+            int rows = query.executeUpdate();
+            return rows;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
     }
 
     @Override
     public int deleteClientTps(BigDecimal clientId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "delete client_tps where client_id = :clientId";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            SQLQuery query = session.createSQLQuery(sql);
+            query.setParameter("clientId", clientId);
+            int rows = query.executeUpdate();
+            return rows;
+        } catch (Exception ex) {
+            Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
     }
 
 }

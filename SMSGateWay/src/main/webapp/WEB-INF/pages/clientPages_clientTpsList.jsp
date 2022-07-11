@@ -114,7 +114,7 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item"
-                                                           href="#"
+                                                           href="updateClientTps?action=update&clientId=${c.clientId}"
                                                            ><i class="bx bx-edit-alt me-1"></i> Sửa</a
                                                         >
 
@@ -147,7 +147,7 @@
                                                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                                                         Đóng
                                                                     </button>
-                                                                    <a href="#" style="color: inherit; text-decoration: none">
+                                                                    <a href="deleteClientTps?clientId=${c.clientId}" style="color: inherit; text-decoration: none">
                                                                         <button type="button" class="btn btn-primary">Xóa</button>
                                                                     </a>
                                                                 </div>

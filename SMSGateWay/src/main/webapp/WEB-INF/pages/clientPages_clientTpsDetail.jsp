@@ -123,10 +123,9 @@
                                                 <form action="addClientTps" method="post">
                                                 </c:if>
                                                 <c:if test="${action.equals('update')}">
-                                                    <form action="" method="post">
+                                                    <form action="updateClientTps" method="post">
 
-                                                        <input type="hidden" name="cpId" value="${cpId}"/>
-                                                        <input type="hidden" name="oldcode" value="${oldcode}"/>
+                                                        <input type="hidden" name="clientId" value="${clientId}"/>
                                                     </c:if>
                                                     <input type="hidden" name="action" value="${action}"/>
                                                     <div class="row">
@@ -156,7 +155,10 @@
                                                             <label for="cpId" class="form-label">Đối tác - Mã</label>
                                                             <select name="cpId" class="form-select">
                                                                 <c:forEach var="c" items="${cps}">
-                                                                    <option value="${c.cpId}">${c.cpName} - ${c.cpCode}</option>
+                                                                    <option value="${c.cpId}"
+                                                                            <c:if test="${c.cpId == cpId}">selected=""</c:if>>
+                                                                        ${c.cpName} - ${c.cpCode}
+                                                                    </option>
                                                                 </c:forEach>
                                                             </select>
                                                         </div>
@@ -164,7 +166,10 @@
                                                             <label for="shcodeCpId" class="form-label">Đối tác - Đầu Số</label>
                                                             <select name="shcodeCpId" class="form-select">
                                                                 <c:forEach var="sc" items="${shcodeCps}">
-                                                                    <option value="${sc.shortcodeCpId}">${sc.cpName} - ${sc.shortcode}</option>
+                                                                    <option value="${sc.shortcodeCpId}"
+                                                                            <c:if test="${sc.shortcodeCpId == shortcodeCpId}">selected=""</c:if>>
+                                                                        ${sc.cpName} - ${sc.shortcode}
+                                                                    </option>
                                                                 </c:forEach>
                                                             </select>
                                                         </div>
