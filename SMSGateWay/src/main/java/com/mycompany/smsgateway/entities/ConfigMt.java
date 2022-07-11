@@ -11,8 +11,10 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,11 +40,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ConfigMt implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "SHORTCODE")
-    private String shortcode;
+//    @Basic(optional = false)
+//    @NotNull
+//    @Size(min = 1, max = 20)
+//    @Column(name = "SHORTCODE")
+    @OneToOne
+    @JoinColumn(name = "SHORTCODE", referencedColumnName = "SHORTCODE")
+    private String shortcodeInConfigMt;
     @Size(max = 500)
     @Column(name = "MT_CONTENT")
     private String mtContent;
@@ -69,17 +73,24 @@ public class ConfigMt implements Serializable {
         this.mtId = mtId;
     }
 
-    public ConfigMt(BigDecimal mtId, String shortcode) {
-        this.mtId = mtId;
-        this.shortcode = shortcode;
+//    public ConfigMt(BigDecimal mtId, String shortcode) {
+//        this.mtId = mtId;
+//        this.shortcode = shortcode;
+//    }
+//
+//    public String getShortcode() {
+//        return shortcode;
+//    }
+//
+//    public void setShortcode(String shortcode) {
+//        this.shortcode = shortcode;
+//    }
+    public String getShortcodeInConfigMt() {
+        return shortcodeInConfigMt;
     }
 
-    public String getShortcode() {
-        return shortcode;
-    }
-
-    public void setShortcode(String shortcode) {
-        this.shortcode = shortcode;
+    public void setShortcodeInConfigMt(String shortcodeInConfigMt) {
+        this.shortcodeInConfigMt = shortcodeInConfigMt;
     }
 
     public String getMtContent() {
@@ -146,5 +157,5 @@ public class ConfigMt implements Serializable {
     public String toString() {
         return "com.mycompany.smsgateway.entities.ConfigMt[ mtId=" + mtId + " ]";
     }
-    
+
 }

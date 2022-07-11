@@ -84,6 +84,9 @@ public class ShortcodeList implements Serializable {
     @OneToMany(mappedBy = "shortcode")
     List<ShortcodeCp> shortcodeCps;
     
+    @OneToOne(mappedBy = "shortcodeInConfigMt")
+    private ConfigMt configMtShcodeMapped;
+    
     public ShortcodeList() {
     }
 
@@ -94,6 +97,14 @@ public class ShortcodeList implements Serializable {
     public ShortcodeList(BigDecimal shcodeId, String shortcode) {
         this.shcodeId = shcodeId;
         this.shortcode = shortcode;
+    }
+
+    public ConfigMt getConfigMtShcodeMapped() {
+        return configMtShcodeMapped;
+    }
+
+    public void setConfigMtShcodeMapped(ConfigMt configMtShcodeMapped) {
+        this.configMtShcodeMapped = configMtShcodeMapped;
     }
 
     public List<ShortcodeCp> getShortcodeCps() {
