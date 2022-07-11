@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ConfigMt.findAll", query = "SELECT c FROM ConfigMt c"),
-    @NamedQuery(name = "ConfigMt.findByShortcode", query = "SELECT c FROM ConfigMt c WHERE c.shortcode = :shortcode"),
+//    @NamedQuery(name = "ConfigMt.findByShortcode", query = "SELECT c FROM ConfigMt c WHERE c.shortcode = :shortcode"),
     @NamedQuery(name = "ConfigMt.findByMtContent", query = "SELECT c FROM ConfigMt c WHERE c.mtContent = :mtContent"),
     @NamedQuery(name = "ConfigMt.findByMtCode", query = "SELECT c FROM ConfigMt c WHERE c.mtCode = :mtCode"),
     @NamedQuery(name = "ConfigMt.findByMtId", query = "SELECT c FROM ConfigMt c WHERE c.mtId = :mtId"),
@@ -46,7 +46,7 @@ public class ConfigMt implements Serializable {
 //    @Column(name = "SHORTCODE")
     @OneToOne
     @JoinColumn(name = "SHORTCODE", referencedColumnName = "SHORTCODE")
-    private String shortcodeInConfigMt;
+    private ShortcodeList shortcodeInConfigMt;
     @Size(max = 500)
     @Column(name = "MT_CONTENT")
     private String mtContent;
@@ -85,11 +85,11 @@ public class ConfigMt implements Serializable {
 //    public void setShortcode(String shortcode) {
 //        this.shortcode = shortcode;
 //    }
-    public String getShortcodeInConfigMt() {
+    public ShortcodeList getShortcodeInConfigMt() {
         return shortcodeInConfigMt;
     }
 
-    public void setShortcodeInConfigMt(String shortcodeInConfigMt) {
+    public void setShortcodeInConfigMt(ShortcodeList shortcodeInConfigMt) {
         this.shortcodeInConfigMt = shortcodeInConfigMt;
     }
 
