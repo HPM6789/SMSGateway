@@ -117,6 +117,9 @@
                                     <c:if test="${notice.equals('success')}">
                                         <div class="alert alert-success" role="alert">Thêm Thành Công</div>
                                     </c:if>
+                                    <c:if test="${notice.equals('successDel')}">
+                                        <div class="alert alert-success" role="alert">Xóa Thành Công</div>
+                                    </c:if>
                                 </div>
                                 <div class="col-md-4"></div>
                             </div>
@@ -148,13 +151,44 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item"
-                                                           href="#"
+                                                           href="updateConfigMt?action=update&mtId=${c.mtId}&page=${page}"
                                                            ><i class="bx bx-edit-alt me-1"></i> Sửa</a
                                                         >
-                                                        <a class="dropdown-item"
-                                                           href="#"
-                                                           ><i class="bx bx-trash me-1"></i> Xóa</a
-                                                        >
+                                                        <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalTop-${c.mtId}">
+                                                            <i class="bx bx-trash me-1"></i> Xóa
+                                                        </button>
+                                                    </div>
+                                                    <!-- Modal -->
+                                                    <div class="modal modal-top fade" id="modalTop-${c.mtId}" tabindex="-1">
+                                                        <div class="modal-dialog">
+                                                            <form class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="modalTopTitle">Xác nhận xóa</h5>
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"
+                                                                        ></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col mb-3">
+                                                                            <h2>Bạn có chắc muốn xóa config <br>với đầu số ${c.shortcode}</h2>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                                        Đóng
+                                                                    </button>
+                                                                    <a href="deleteConfigMt?mtId=${c.mtId}&page=${page}" style="color: inherit; text-decoration: none">
+                                                                        <button type="button" class="btn btn-primary">Xóa</button>
+                                                                    </a>
+                                                                </div>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -201,29 +235,29 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
                                             <li class="page-item first">
-                                                <a class="page-link" href="searchConfigMt?page=1&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchConfigMt?page=1&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}"
                                                    ><i class="tf-icon bx bx-chevrons-left"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item prev">
-                                                <a class="page-link" href="searchConfigMt?page=${(page==1)?1:(page-1)}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchConfigMt?page=${(page==1)?1:(page-1)}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}"
                                                    ><i class="tf-icon bx bx-chevron-left"></i
                                                     ></a>
                                             </li>
                                             <c:forEach var="i" begin="${startDisplayPage}" end="${endDisplayPage}">
                                                 <li class="page-item ${i==page?"active":""}">
-                                                    <a class="page-link" href="searchConfigMt?page=${i}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}">
+                                                    <a class="page-link" href="searchConfigMt?page=${i}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}">
                                                         ${i}
                                                     </a>
                                                 </li>
                                             </c:forEach>
                                             <li class="page-item next">
-                                                <a class="page-link" href="searchConfigMt?page=${(page==endPage)?endPage:(page+1)}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchConfigMt?page=${(page==endPage)?endPage:(page+1)}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}"
                                                    ><i class="tf-icon bx bx-chevron-right"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item last">
-                                                <a class="page-link" href="searchConfigMt?page=${endPage}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}&status=${status}"
+                                                <a class="page-link" href="searchConfigMt?page=${endPage}&action=search&inputSearch=${inputSearch}&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}"
                                                    ><i class="tf-icon bx bx-chevrons-right"></i
                                                     ></a>
                                             </li>

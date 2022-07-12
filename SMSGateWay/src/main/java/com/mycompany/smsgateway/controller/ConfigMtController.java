@@ -179,7 +179,7 @@ public class ConfigMtController {
     
     @RequestMapping(value = "updateConfigMt", method = RequestMethod.GET)
     public String updateConfigMt(Model model, HttpSession session, @RequestParam String action,
-            @RequestParam String mtId, @RequestParam String oldShortcode) {
+            @RequestParam String mtId, @RequestParam String page) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -191,6 +191,8 @@ public class ConfigMtController {
         }
         BigDecimal mtIdDec = new BigDecimal(mtId);
         ConfigMtModel config = configMtDAO.getMtById(mtIdDec);
+        List<ShortcodeListModel> shcodes = shortcodeListDAO.getAllShortcode();
+        model.addAttribute("shcodes", shcodes);
         model.addAttribute("mtId", mtId);
         model.addAttribute("shortcode", config.getShortcode());
         model.addAttribute("oldShortcode", config.getShortcode());
@@ -198,6 +200,7 @@ public class ConfigMtController {
         model.addAttribute("mtCode", config.getMtCode());
         model.addAttribute("createTime", config.getCreateTime());
         model.addAttribute("updateTime", config.getUpdateTime());
+        model.addAttribute("page", page);
         model.addAttribute("action", action);
         return "configMtPages_configMtDetail";
     }
@@ -206,7 +209,7 @@ public class ConfigMtController {
     public String updateConfigMt(Model model, HttpSession session, @RequestParam String action,
             @RequestParam String mtId, @RequestParam String mtContent,
             @RequestParam String oldShortcode, @RequestParam String shortcode,
-            HttpServletRequest request) {
+            HttpServletRequest request, @RequestParam String page) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -224,6 +227,7 @@ public class ConfigMtController {
                     "CONFIG_MT", mtIdDec.toBigInteger(), "Thất bại", "Thêm Config_MT",
                     null, null, request);
             model.addAttribute("oldShortcode", oldShortcode);
+            model.addAttribute("notice", "Đầu Số đã được sử dụng. Cập nhật thất bại!");
         } else {
             model.addAttribute("oldShortcode", shortcode);
             int result = configMtDAO.updateConfigMt(mtIdDec, shortcode, mtContent);
@@ -233,17 +237,50 @@ public class ConfigMtController {
             } else {
                 actionResult = "Thất bại";
             }
+            model.addAttribute("notice", "Cập nhật thành công!");
             actionLogServices.logAction(userSession.getUserId(), "UPDATE_CONFIG_MT",
                     "CONFIG_MT", mtIdDec.toBigInteger(), actionResult, "Cập nhật Config_MT",
                     null, null, request);
         }
         ConfigMtModel configById = configMtDAO.getMtById(mtIdDec);
+        List<ShortcodeListModel> shcodes = shortcodeListDAO.getAllShortcode();
+        model.addAttribute("shcodes", shcodes);
+        model.addAttribute("mtId", mtId);
         model.addAttribute("shortcode", shortcode);
         model.addAttribute("mtContent", mtContent);
         model.addAttribute("mtCode", configById.getMtCode());
         model.addAttribute("createTime", configById.getCreateTime());
         model.addAttribute("updateTime", configById.getUpdateTime());
+        model.addAttribute("page", page);
         model.addAttribute("action", action);
         return "configMtPages_configMtDetail";
+    }
+    
+    @RequestMapping(value = "deleteConfigMt", method = RequestMethod.GET)
+    public String deleteConfigMt(Model model, HttpSession session, HttpServletRequest request,
+            @RequestParam String mtId, @RequestParam String page) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CONFIG_MT_DELETE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal mtIdDec = new BigDecimal(mtId);
+        int result = configMtDAO.deleteConfigMt(mtIdDec);
+        String redirect = "redirect:configMtList?action=list&page=" + page;
+        String actionResult = "";
+            if (result == 1) {
+                actionResult = "Thành Công";
+                redirect += "&notice=successDel";
+            } else {
+                actionResult = "Thất bại";
+            }
+            actionLogServices.logAction(userSession.getUserId(), "DELETE_CONFIG_MT",
+                    "CONFIG_MT", mtIdDec.toBigInteger(), actionResult, "Xóa Config_MT",
+                    null, null, request);
+        return redirect;
     }
 }

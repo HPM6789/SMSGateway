@@ -80,7 +80,7 @@ public class ConfigMtDAOImpl implements ConfigMtDAO {
                 + " from " + ConfigMt.class.getName() + " c "
                 + " left join c.shortcodeInConfigMt sc where 1=1";
         if (inputSearch != null && !inputSearch.equals("")) {
-            sql += " and sc.shortcode like '%" + inputSearch + "%'";
+            sql += " and c.shortcodeInConfigMt.shortcode like '%" + inputSearch + "%'";
         }
         if (fromCreateDate != null && !fromCreateDate.equals("")) {
             sql += " and c.createTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
@@ -181,7 +181,7 @@ public class ConfigMtDAOImpl implements ConfigMtDAO {
         String sql = "select count(c)"
                 + " from " + ConfigMt.class.getName() + " c where 1=1";
         if (inputSearch != null && !inputSearch.equals("")) {
-            sql += " and sc.shortcode like '%" + inputSearch + "%'";
+            sql += " and c.shortcodeInConfigMt.shortcode like '%" + inputSearch + "%'";
         }
         if (fromCreateDate != null && !fromCreateDate.equals("")) {
             sql += " and c.createTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";

@@ -98,7 +98,12 @@
                     <!-- Content wrapper -->
                     <div class="content-wrapper">
                         <!-- Content -->
+                        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="configMtList?action=list&page=${page}"><i class="bx bx-user me-1"></i> Quay Lại</a>
+                            </li>
 
+                        </ul>
                         <div class="container-xxl flex-grow-1 container-p-y">
                             <c:if test="${action.equals('add')}">
                                 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Thêm Đối Tác</h4>
