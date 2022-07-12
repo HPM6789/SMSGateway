@@ -107,9 +107,9 @@
                         <div class="table-responsive text-nowrap">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <a href="#" style="color: inherit; text-decoration: none">
+                                    <a href="addConfigMt?action=add" style="color: inherit; text-decoration: none">
                                         <button class="btn btn-primary me-2">
-                                            Thêm Mới Cmdcode
+                                            Thêm Mới Cấu Hình
                                         </button>
                                     </a>
                                 </div>
@@ -119,7 +119,6 @@
                                     </c:if>
                                 </div>
                                 <div class="col-md-4"></div>
-
                             </div>
                             <table class="table" id="">
                                 <thead class="table-light">

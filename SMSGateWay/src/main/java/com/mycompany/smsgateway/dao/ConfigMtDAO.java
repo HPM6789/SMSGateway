@@ -20,15 +20,19 @@ public interface ConfigMtDAO {
     
     public List<ConfigMtModel> getConfigMtByOption(String inputSearch, String fromCreateDate,
             String toCreateDate, int start, int next);
+    
+    public ConfigMtModel getMtByShortcode(String shortcode);
+    
+    public BigDecimal getNewestMtId();
 
     public Long getTotalConfigMt();
     
     public Long getTotalConfigMtByOption(String inputSearch, String fromCreateDate,
             String toCreateDate);
 
-    public int addConfigMt(String shortcode, String mtContent, String mtCode);
+    public int addConfigMt(String shortcode, String mtContent);
 
-    public int updateConfigMt(BigDecimal mtId, String shortcode, String mtContent, String mtCode);
+    public int updateConfigMt(BigDecimal mtId, String shortcode, String mtContent);
 
     public int deleteConfigMt(BigDecimal mtId);
 }
