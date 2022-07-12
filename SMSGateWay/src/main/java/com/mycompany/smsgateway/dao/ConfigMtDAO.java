@@ -23,6 +23,8 @@ public interface ConfigMtDAO {
     
     public ConfigMtModel getMtByShortcode(String shortcode);
     
+    public ConfigMtModel getMtById(BigDecimal mtId);
+    
     public BigDecimal getNewestMtId();
 
     public Long getTotalConfigMt();

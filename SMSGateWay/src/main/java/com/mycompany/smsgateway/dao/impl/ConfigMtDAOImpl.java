@@ -123,6 +123,26 @@ public class ConfigMtDAOImpl implements ConfigMtDAO {
     }
 
     @Override
+    public ConfigMtModel getMtById(BigDecimal mtId) {
+        String sql = "select new " + ConfigMtModel.class.getName()
+                + "(c.mtId, sc.shcodeId, sc.shortcode,"
+                + " c.mtContent, c.mtCode, c.createTime, c.updateTime)"
+                + " from " + ConfigMt.class.getName() + " c "
+                + " left join c.shortcodeInConfigMt sc"
+                + " where c.mtId like :mtId";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            query.setParameter("mtId", mtId);
+            ConfigMtModel config = (ConfigMtModel) query.uniqueResult();
+            return config;
+        } catch (Exception ex) {
+            Logger.getLogger(ConfigMtDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public BigDecimal getNewestMtId() {
         String sql = "select c.mtId"
                 + " from " + ConfigMt.class.getName() + " c "

@@ -176,4 +176,74 @@ public class ConfigMtController {
         }
         return "redirect:configMtList?action=list&notice=success";
     }
+    
+    @RequestMapping(value = "updateConfigMt", method = RequestMethod.GET)
+    public String updateConfigMt(Model model, HttpSession session, @RequestParam String action,
+            @RequestParam String mtId, @RequestParam String oldShortcode) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CONFIG_MT_UPDATE") && !roles.contains("CONFIG_MT_DETAIL")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal mtIdDec = new BigDecimal(mtId);
+        ConfigMtModel config = configMtDAO.getMtById(mtIdDec);
+        model.addAttribute("mtId", mtId);
+        model.addAttribute("shortcode", config.getShortcode());
+        model.addAttribute("oldShortcode", config.getShortcode());
+        model.addAttribute("mtContent", config.getMtContent());
+        model.addAttribute("mtCode", config.getMtCode());
+        model.addAttribute("createTime", config.getCreateTime());
+        model.addAttribute("updateTime", config.getUpdateTime());
+        model.addAttribute("action", action);
+        return "configMtPages_configMtDetail";
+    }
+    
+    @RequestMapping(value = "updateConfigMt", method = RequestMethod.POST)
+    public String updateConfigMt(Model model, HttpSession session, @RequestParam String action,
+            @RequestParam String mtId, @RequestParam String mtContent,
+            @RequestParam String oldShortcode, @RequestParam String shortcode,
+            HttpServletRequest request) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("CONFIG_MT_UPDATE") && !roles.contains("CONFIG_MT_DETAIL")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal mtIdDec = new BigDecimal(mtId);
+        ConfigMtModel config = configMtDAO.getMtByShortcode(shortcode);
+        if(config!=null && !config.getShortcode().equals(oldShortcode)) {
+            model.addAttribute("notice", "Cập nhật thất bại");
+            actionLogServices.logAction(userSession.getUserId(), "UPDATE_CONFIG_MT",
+                    "CONFIG_MT", mtIdDec.toBigInteger(), "Thất bại", "Thêm Config_MT",
+                    null, null, request);
+            model.addAttribute("oldShortcode", oldShortcode);
+        } else {
+            model.addAttribute("oldShortcode", shortcode);
+            int result = configMtDAO.updateConfigMt(mtIdDec, shortcode, mtContent);
+            String actionResult = "";
+            if (result == 1) {
+                actionResult = "Thành Công";
+            } else {
+                actionResult = "Thất bại";
+            }
+            actionLogServices.logAction(userSession.getUserId(), "UPDATE_CONFIG_MT",
+                    "CONFIG_MT", mtIdDec.toBigInteger(), actionResult, "Cập nhật Config_MT",
+                    null, null, request);
+        }
+        ConfigMtModel configById = configMtDAO.getMtById(mtIdDec);
+        model.addAttribute("shortcode", shortcode);
+        model.addAttribute("mtContent", mtContent);
+        model.addAttribute("mtCode", configById.getMtCode());
+        model.addAttribute("createTime", configById.getCreateTime());
+        model.addAttribute("updateTime", configById.getUpdateTime());
+        model.addAttribute("action", action);
+        return "configMtPages_configMtDetail";
+    }
 }

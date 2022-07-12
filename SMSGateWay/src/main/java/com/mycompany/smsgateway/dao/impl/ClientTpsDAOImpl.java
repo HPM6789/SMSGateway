@@ -141,7 +141,7 @@ public class ClientTpsDAOImpl implements ClientTpsDAO {
             Session session = sessionFactory.getCurrentSession();
             SQLQuery query = session.createSQLQuery(sql);
             query.setParameter("tps", tps);
-            query.setParameter("updateFlg", "0");
+            query.setParameter("updateFlg", "1");
             query.setParameter("note", note);
             query.setParameter("cpId", cpId);
             query.setParameter("shcodeId", shcodeId);

@@ -220,7 +220,7 @@ public class GroupController {
             return "accessDeniedPage";
         }
         Long idLong = Long.parseLong(id);
-        GroupsModel group = groupDAO.getGroupById(idLong);
+        GroupsModel group = groupDAO.getGroupByName(name);
         List<AuthUserModel> users = authUserDAO.getUsersByGroup(idLong);
         BigInteger ObjectId = BigInteger.valueOf(idLong);
         if (group != null && !group.getName().equals(oldname)) {

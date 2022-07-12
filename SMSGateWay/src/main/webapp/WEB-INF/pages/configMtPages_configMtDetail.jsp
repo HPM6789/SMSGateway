@@ -123,9 +123,9 @@
                                                 <form action="addConfigMt" method="post">
                                                 </c:if>
                                                 <c:if test="${action.equals('update')}">
-                                                    <form action="" method="post">
-
-                                                        <input type="hidden" name="clientId" value="${mtId}"/>
+                                                    <form action="updateConfigMt" method="post">
+                                                        <input type="hidden" name="oldShortcode" value="${oldShortcode}"/>
+                                                        <input type="hidden" name="mtId" value="${mtId}"/>
                                                     </c:if>
                                                     <input type="hidden" name="action" value="${action}"/>
                                                     <div class="row">
@@ -151,6 +151,27 @@
                                                                 autofocus 
                                                                 />
                                                         </div>
+                                                        <c:if test="${action.equals('update')}">
+                                                            <div class="mb-3 col-md-6">
+                                                                <label for="" class="form-label">Mã MT</label>
+                                                                <p>${mtCode}</p>
+                                                            </div>
+                                                            <div class="mb-3 col-md-6">
+                                                                <label for="" class="form-label">Ngày Tạo</label>
+                                                                <p>${createTime}</p>
+                                                            </div>
+                                                            <div class="mb-3 col-md-6">
+                                                                <label for="" class="form-label">Ngày Cập Nhật</label>
+                                                                <p>
+                                                                    <c:if test="${updateTime==null}">
+                                                                        None
+                                                                    </c:if>
+                                                                    <c:if test="${updateTime!=null}">
+                                                                        ${updateTime}
+                                                                    </c:if>
+                                                                </p>
+                                                            </div>
+                                                        </c:if>
                                                     </div>
                                                     <c:if test="${action.equals('add')}">
 
