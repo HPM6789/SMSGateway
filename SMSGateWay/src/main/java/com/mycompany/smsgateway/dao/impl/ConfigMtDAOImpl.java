@@ -16,11 +16,15 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Minh Hieu Pham
  */
+@Repository
+@Transactional
 public class ConfigMtDAOImpl implements ConfigMtDAO {
 
     @Autowired
@@ -29,10 +33,10 @@ public class ConfigMtDAOImpl implements ConfigMtDAO {
     @Override
     public List<ConfigMtModel> getAllConfigMt() {
         String sql = "select new " + ConfigMtModel.class.getName()
-                + "(c.mtId, sc.shcodeId, sc.shortcode," 
-                +" c.mtContent, c.mtCode, c.createTime, c.updateTime)"
+                + "(c.mtId, sc.shcodeId, sc.shortcode,"
+                + " c.mtContent, c.mtCode, c.createTime, c.updateTime)"
                 + " from " + ConfigMt.class.getName() + " c "
-                + " inner join c.shortcodeInConfigMt sc"
+                + " left join c.shortcodeInConfigMt sc"
                 + " order by c.createTime desc";
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -48,11 +52,42 @@ public class ConfigMtDAOImpl implements ConfigMtDAO {
     @Override
     public List<ConfigMtModel> getAllConfigMt(int start, int next) {
         String sql = "select new " + ConfigMtModel.class.getName()
-                + "(c.mtId, sc.shcodeId, sc.shortcode," 
-                +" c.mtContent, c.mtCode, c.createTime, c.updateTime)"
+                + "(c.mtId, sc.shcodeId, sc.shortcode,"
+                + " c.mtContent, c.mtCode, c.createTime, c.updateTime)"
                 + " from " + ConfigMt.class.getName() + " c "
-                + " inner join c.shortcodeInConfigMt sc"
+                + " left join c.shortcodeInConfigMt sc"
                 + " order by c.createTime desc";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            query.setFirstResult(start);
+            query.setMaxResults(next);
+            List<ConfigMtModel> configs = query.list();
+            return configs;
+        } catch (Exception ex) {
+            Logger.getLogger(ConfigMtDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
+    public List<ConfigMtModel> getConfigMtByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, int start, int next) {
+        String sql = "select new " + ConfigMtModel.class.getName()
+                + "(c.mtId, sc.shcodeId, sc.shortcode,"
+                + " c.mtContent, c.mtCode, c.createTime, c.updateTime)"
+                + " from " + ConfigMt.class.getName() + " c "
+                + " left join c.shortcodeInConfigMt sc where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and sc.shortcode like '%" + inputSearch + "%'";
+        }
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and c.createTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
+        }
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and c.createTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
+        }
+        sql += " order by c.createTime desc";
         try {
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);
@@ -71,6 +106,32 @@ public class ConfigMtDAOImpl implements ConfigMtDAO {
         String sql = "select count(c)"
                 + " from " + ConfigMt.class.getName() + " c "
                 + " order by c.createTime desc";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            Long total = (Long) query.uniqueResult();
+            return total;
+        } catch (Exception ex) {
+            Logger.getLogger(ConfigMtDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return new Long("0");
+        }
+    }
+
+    @Override
+    public Long getTotalConfigMtByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate) {
+        String sql = "select count(c)"
+                + " from " + ConfigMt.class.getName() + " c where 1=1";
+        if (inputSearch != null && !inputSearch.equals("")) {
+            sql += " and sc.shortcode like '%" + inputSearch + "%'";
+        }
+        if (fromCreateDate != null && !fromCreateDate.equals("")) {
+            sql += " and c.createTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
+        }
+        if (toCreateDate != null && !toCreateDate.equals("")) {
+            sql += " and c.createTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
+        }
+        sql += " order by c.createTime desc";
         try {
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);

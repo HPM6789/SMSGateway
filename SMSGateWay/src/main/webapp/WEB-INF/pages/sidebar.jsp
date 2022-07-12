@@ -136,11 +136,19 @@
                     </a>
                 </li>
             </c:if>
-            <c:if test="${roleUser.contains('CMDCODE_LIST')}">
+            <c:if test="${roleUser.contains('CLIENT_TPS_LIST')}">
                 <li class="menu-item ">
                     <a href="clientTpsList?action=list" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-home-circle"></i>
                         <div data-i18n="Analytics">TPS</div>
+                    </a>
+                </li>
+            </c:if>
+            <c:if test="${roleUser.contains('CONFIG_MT_LIST')}">
+                <li class="menu-item ">
+                    <a href="configMtList?action=list" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                        <div data-i18n="Analytics">Danh Sách cấu hình MT</div>
                     </a>
                 </li>
             </c:if>

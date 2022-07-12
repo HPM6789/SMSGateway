@@ -17,8 +17,14 @@ public interface ConfigMtDAO {
     public List<ConfigMtModel> getAllConfigMt();
 
     public List<ConfigMtModel> getAllConfigMt(int start, int next);
+    
+    public List<ConfigMtModel> getConfigMtByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate, int start, int next);
 
     public Long getTotalConfigMt();
+    
+    public Long getTotalConfigMtByOption(String inputSearch, String fromCreateDate,
+            String toCreateDate);
 
     public int addConfigMt(String shortcode, String mtContent, String mtCode);
 
