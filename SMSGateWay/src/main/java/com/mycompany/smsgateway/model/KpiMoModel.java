@@ -35,6 +35,24 @@ public class KpiMoModel {
     public KpiMoModel() {
     }
 
+    public KpiMoModel(String datetime, BigInteger moShortcode, BigInteger moReceive, 
+            BigInteger moError, BigInteger moPending, BigInteger moFinished, 
+            BigInteger moNotifyPending, BigInteger moNotifyFinished, BigInteger moRefund, 
+            BigInteger moCharge) {
+        this.datetime = datetime;
+        this.moShortcode = moShortcode;
+        this.moReceive = moReceive;
+        this.moError = moError;
+        this.moPending = moPending;
+        this.moFinished = moFinished;
+        this.moNotifyPending = moNotifyPending;
+        this.moNotifyFinished = moNotifyFinished;
+        this.moRefund = moRefund;
+        this.moCharge = moCharge;
+    }
+    
+    
+
     public String getDatetime() {
         return datetime;
     }

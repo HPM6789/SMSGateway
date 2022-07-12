@@ -152,6 +152,14 @@
                     </a>
                 </li>
             </c:if>
+            <c:if test="${roleUser.contains('KPIMO')}">
+                <li class="menu-item ">
+                    <a href="kpiMoList?action=list" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                        <div data-i18n="Analytics">Danh Sách KPI MO</div>
+                    </a>
+                </li>
+            </c:if>
             <c:if test="${roleUser.contains('TYPE_LIST')}">
                 <li class="menu-item ">
                     <a href="typelist?action=list" class="menu-link">
