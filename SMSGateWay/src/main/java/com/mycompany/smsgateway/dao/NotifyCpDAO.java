@@ -5,6 +5,8 @@
 package com.mycompany.smsgateway.dao;
 
 import com.mycompany.smsgateway.model.NotifyCpModel;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -20,8 +22,19 @@ public interface NotifyCpDAO {
     public List<NotifyCpModel> getNotifyCpsByOption(String inputSearch, String fromCreateDate,
             String toCreateDate, int start, int next);
     
+    public NotifyCpModel getNotifyCpByCpId(BigDecimal cpId);
+    
+    public BigDecimal getNewestNotifyId();
+    
     public Long getTotalNotifyCp();
     
     public Long getTotalNotifyCpByOption(String inputSearch, String fromCreateDate,
             String toCreateDate);
+    
+    public int addNotifyCp(String moReceiveUrl, BigInteger cpId, String note, String moReceiveUrlBkp);
+    
+    public int updateNotifyCp(BigDecimal notifyId, String moReceiveUrl, BigInteger cpId, 
+            String note, BigInteger status, String moReceiveUrlBkp);
+    
+    public int deleteNotifyCp(BigDecimal notifyId);
 }

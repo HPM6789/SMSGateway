@@ -106,10 +106,10 @@
                         </ul>
                         <div class="container-xxl flex-grow-1 container-p-y">
                             <c:if test="${action.equals('add')}">
-                                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Thêm Đối Tác</h4>
+                                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Thêm Cấu Hình</h4>
                             </c:if>
                             <c:if test="${action.equals('update')}">
-                                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Cập Nhật Đối Tác</h4>
+                                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Cập Nhật Cấu Hình</h4>
                             </c:if>
                             <!-- Basic Layout -->
                             <div class="row">

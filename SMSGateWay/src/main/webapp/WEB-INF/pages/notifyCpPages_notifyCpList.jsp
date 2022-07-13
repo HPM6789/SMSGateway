@@ -103,17 +103,17 @@
                     </div>
                     <!-- Bootstrap Table with Header - Light -->
                     <div class="card">
-                        <h5 class="card-header">Danh sách Cmdcode</h5>
+                        <h5 class="card-header">Danh sách Notify Cp</h5>
                         <div class="table-responsive text-nowrap">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <a href="#" style="color: inherit; text-decoration: none">
+                                    <a href="addNotifyCp?action=add" style="color: inherit; text-decoration: none">
                                         <button class="btn btn-primary me-2" style="margin-left: 10px; margin-bottom: 10px">
-                                            Thêm Mới Cấu Hình
+                                            Thêm Mới Notify Cp
                                         </button>
                                     </a>
                                 </div>
-                                <div class="col-md-3" style="text-align: center">
+                                <div class="col-md-3" style="text-align: center; margin-left: 10px">
                                     <c:if test="${notice.equals('success')}">
                                         <div class="alert alert-success" role="alert">Thêm Thành Công</div>
                                     </c:if>

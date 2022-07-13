@@ -103,7 +103,7 @@
                     </div>
                     <!-- Bootstrap Table with Header - Light -->
                     <div class="card">
-                        <h5 class="card-header">Danh sách Cmdcode</h5>
+                        <h5 class="card-header">Danh sách cấu hình</h5>
                         <div class="table-responsive text-nowrap">
                             <div class="row">
                                 <div class="col-md-2">
