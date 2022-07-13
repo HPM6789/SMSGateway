@@ -235,7 +235,7 @@ public class NotifyCpController {
             model.addAttribute("oldCpId", oldCpId);
             model.addAttribute("notice", "ID đối tác đã được sử dụng. Cập nhật thất bại!");
             actionLogServices.logAction(userSession.getUserId(), "UPDATE_NOTIFY_CP",
-                    "NOTIFY_CP", notifyIdDec.toBigInteger(), "Thất bại", "Thêm NOTIFY_CP",
+                    "NOTIFY_CP", notifyIdDec.toBigInteger(), "Thất bại", "Cập nhật NOTIFY_CP",
                     null, null, request);
         } else {
             model.addAttribute("oldCpId", cpId);
@@ -249,7 +249,7 @@ public class NotifyCpController {
             }
             model.addAttribute("notice", "Cập nhật thành công!");
             actionLogServices.logAction(userSession.getUserId(), "UPDATE_NOTIFY_CP",
-                    "NOTIFY_CP", notifyIdDec.toBigInteger(), actionResult, "Thêm NOTIFY_CP",
+                    "NOTIFY_CP", notifyIdDec.toBigInteger(), actionResult, "Cập nhật NOTIFY_CP",
                     null, null, request);
         }
         NotifyCpModel newNotify = notifyCpDAO.getNotifyCpById(notifyIdDec);
@@ -265,5 +265,33 @@ public class NotifyCpController {
         model.addAttribute("createDate", newNotify.getCreateDate());
         model.addAttribute("lastUpdate", newNotify.getLastUpdate());
         return "notifyCpPages_notifyCpDetail";
+    }
+
+    @RequestMapping(value = "deleteNotifyCp", method = RequestMethod.GET)
+    public String deleteNotifyCp(Model model, HttpSession session, HttpServletRequest request,
+            @RequestParam String notifyId, @RequestParam String page) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("NOTIFYCP_DELETE")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal notifyIdDec = new BigDecimal(notifyId);
+        int result = notifyCpDAO.deleteNotifyCp(notifyIdDec);
+        String redirect = "redirect:notifyCpList?action=list&page=" + page;
+        String actionResult = "";
+        if (result == 1) {
+            actionResult = "Thành Công";
+            redirect += "&notice=successDel";
+        } else {
+            actionResult = "Thất bại";
+        }
+        actionLogServices.logAction(userSession.getUserId(), "DELETE_NOTIFY_CP",
+                    "NOTIFY_CP", notifyIdDec.toBigInteger(), actionResult, "Xóa NOTIFY_CP",
+                    null, null, request);
+        return redirect;
     }
 }

@@ -188,7 +188,7 @@
                                                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                                                         Đóng
                                                                     </button>
-                                                                    <a href="#" style="color: inherit; text-decoration: none">
+                                                                    <a href="deleteNotifyCp?notifyId=${n.notifyId}&page=${page}" style="color: inherit; text-decoration: none">
                                                                         <button type="button" class="btn btn-primary">Xóa</button>
                                                                     </a>
                                                                 </div>
