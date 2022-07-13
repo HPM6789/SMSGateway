@@ -128,6 +128,28 @@ public class NotifyCpDAOImpl implements NotifyCpDAO {
     }
 
     @Override
+    public NotifyCpModel getNotifyCpById(BigDecimal notifyId) {
+        String sql = "select new " + NotifyCpModel.class.getName()
+                + "(n.notifyId, n.moReceiveUrl, "
+                + "cp.cpId, cp.cpName, cp.cpCode, n.note, n.createDate, "
+                + "n.lastUpdate, n.status, n.shcodeId, n.moReceiveUrlBkp)"
+                + " from " + NotifyCp.class.getName() + " n "
+                + " inner join n.cpInNotifyCp cp"
+                + " where n.notifyId = :notifyId";
+        try {
+            System.out.println("notifyID: " + notifyId);
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            query.setParameter("notifyId", notifyId);
+            NotifyCpModel notify = (NotifyCpModel) query.uniqueResult();
+            return notify;
+        } catch (Exception ex) {
+            Logger.getLogger(NotifyCpDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public BigDecimal getNewestNotifyId() {
         String sql = "select n.notifyId"
                 + " from " + NotifyCp.class.getName() + " n "
@@ -214,7 +236,7 @@ public class NotifyCpDAOImpl implements NotifyCpDAO {
     public int updateNotifyCp(BigDecimal notifyId, String moReceiveUrl, BigInteger cpId,
             String note, BigInteger status, String moReceiveUrlBkp) {
         String sql = "update notify_cp set mo_receive_url = :moReceiveUrl, cp_id = :cpId, note = :note,"
-                + " last_update = lastUpdate, status = :status, mo_receive_url_bkp = :moReceiveUrlBkp"
+                + " last_update = :lastUpdate, status = :status, mo_receive_url_bkp = :moReceiveUrlBkp"
                 + " where notify_id = :notifyId";
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -222,7 +244,7 @@ public class NotifyCpDAOImpl implements NotifyCpDAO {
             query.setParameter("moReceiveUrl", moReceiveUrl);
             query.setParameter("cpId", cpId);
             query.setParameter("note", note);
-            query.setParameter("createDate", new Timestamp(System.currentTimeMillis()));
+            query.setParameter("lastUpdate", new Timestamp(System.currentTimeMillis()));
             query.setParameter("status", status);
             query.setParameter("moReceiveUrlBkp", moReceiveUrlBkp);
             query.setParameter("notifyId", notifyId);

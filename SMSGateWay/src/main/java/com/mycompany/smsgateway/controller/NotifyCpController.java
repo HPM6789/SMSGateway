@@ -139,7 +139,7 @@ public class NotifyCpController {
 
     @RequestMapping(value = "addNotifyCp", method = RequestMethod.POST)
     public String addNotifyCp(Model model, HttpSession session, @RequestParam String action,
-            @RequestParam String cpId, @RequestParam String moReceiveUrl, 
+            @RequestParam String cpId, @RequestParam String moReceiveUrl,
             @RequestParam(required = false) String note,
             @RequestParam(required = false) String moReceiveUrlBkp, HttpServletRequest request) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
@@ -169,8 +169,8 @@ public class NotifyCpController {
             return "redirect:notifyCpList?action=list&notice=success";
         }
         actionLogServices.logAction(userSession.getUserId(), "INSERT_NOTIFY_CP",
-                    "NOTIFY_CP", BigInteger.ZERO, "Thất bại", "Thêm NOTIFY_CP",
-                    null, null, request);
+                "NOTIFY_CP", BigInteger.ZERO, "Thất bại", "Thêm NOTIFY_CP",
+                null, null, request);
         List<CpListModel> cps = cpListDAO.getAllCpList();
         model.addAttribute("cps", cps);
         model.addAttribute("action", action);
@@ -179,6 +179,91 @@ public class NotifyCpController {
         model.addAttribute("cpId", cpId);
         model.addAttribute("moReceiveUrlBkp", moReceiveUrlBkp);
         model.addAttribute("notice", "Thêm thất bại");
+        return "notifyCpPages_notifyCpDetail";
+    }
+
+    @RequestMapping(value = "updateNotifyCp", method = RequestMethod.GET)
+    public String updateNotifyCp(Model model, HttpSession session, @RequestParam String action,
+            @RequestParam String notifyId, @RequestParam String page) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("NOTIFYCP_UPDATE") && !roles.contains("NOTIFYCP_DETAIL")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal notifyIdDec = new BigDecimal(notifyId);
+        NotifyCpModel notify = notifyCpDAO.getNotifyCpById(notifyIdDec);
+        List<CpListModel> cps = cpListDAO.getAllCpList();
+        System.out.println("cpID: " + notify.getCpId() + "- notifyID: " + notify.getNotifyId());
+        model.addAttribute("cps", cps);
+        model.addAttribute("action", action);
+        model.addAttribute("notifyId", notify.getNotifyId());
+        model.addAttribute("cpId", notify.getCpIdDec());
+        model.addAttribute("oldCpId", notify.getCpIdDec());
+        model.addAttribute("moReceiveUrl", notify.getMoReceiveUrl());
+        model.addAttribute("note", notify.getNote());
+        model.addAttribute("moReceiveUrlBkp", notify.getMoReceiveUrlBkp());
+        model.addAttribute("status", notify.getStatus());
+        model.addAttribute("createDate", notify.getCreateDate());
+        model.addAttribute("lastUpdate", notify.getLastUpdate());
+        return "notifyCpPages_notifyCpDetail";
+    }
+
+    @RequestMapping(value = "updateNotifyCp", method = RequestMethod.POST)
+    public String updateNotifyCp(Model model, HttpSession session, @RequestParam String action,
+            @RequestParam String notifyId, @RequestParam String page,
+            @RequestParam String cpId, @RequestParam String moReceiveUrl,
+            @RequestParam(required = false) String note,
+            @RequestParam(required = false) String moReceiveUrlBkp, HttpServletRequest request,
+            @RequestParam String status, @RequestParam String oldCpId) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
+        List<String> roles = (List<String>) session.getAttribute("roleUser");
+        if (!roles.contains("NOTIFYCP_UPDATE") && !roles.contains("NOTIFYCP_DETAIL")) {
+            model.addAttribute("message", "This page is protected!");
+            return "accessDeniedPage";
+        }
+        BigDecimal notifyIdDec = new BigDecimal(notifyId);
+        BigDecimal cpIdDec = new BigDecimal(cpId);
+        NotifyCpModel notify = notifyCpDAO.getNotifyCpByCpId(cpIdDec);
+        if (notify != null && !notify.getCpIdDec().equals(new BigDecimal(oldCpId))) {
+            model.addAttribute("oldCpId", oldCpId);
+            model.addAttribute("notice", "ID đối tác đã được sử dụng. Cập nhật thất bại!");
+            actionLogServices.logAction(userSession.getUserId(), "UPDATE_NOTIFY_CP",
+                    "NOTIFY_CP", notifyIdDec.toBigInteger(), "Thất bại", "Thêm NOTIFY_CP",
+                    null, null, request);
+        } else {
+            model.addAttribute("oldCpId", cpId);
+            int result = notifyCpDAO.updateNotifyCp(notifyIdDec, moReceiveUrl,
+                    cpIdDec.toBigInteger(), note, new BigInteger(status), moReceiveUrlBkp);
+            String actionResult = "";
+            if (result == 1) {
+                actionResult = "Thành Công";
+            } else {
+                actionResult = "Thất bại";
+            }
+            model.addAttribute("notice", "Cập nhật thành công!");
+            actionLogServices.logAction(userSession.getUserId(), "UPDATE_NOTIFY_CP",
+                    "NOTIFY_CP", notifyIdDec.toBigInteger(), actionResult, "Thêm NOTIFY_CP",
+                    null, null, request);
+        }
+        NotifyCpModel newNotify = notifyCpDAO.getNotifyCpById(notifyIdDec);
+        List<CpListModel> cps = cpListDAO.getAllCpList();
+        model.addAttribute("cps", cps);
+        model.addAttribute("action", action);
+        model.addAttribute("notifyId", notifyId);
+        model.addAttribute("cpId", cpId);
+        model.addAttribute("moReceiveUrl", moReceiveUrl);
+        model.addAttribute("note", note);
+        model.addAttribute("moReceiveUrlBkp", moReceiveUrlBkp);
+        model.addAttribute("status", status);
+        model.addAttribute("createDate", newNotify.getCreateDate());
+        model.addAttribute("lastUpdate", newNotify.getLastUpdate());
         return "notifyCpPages_notifyCpDetail";
     }
 }

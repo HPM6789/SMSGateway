@@ -130,6 +130,8 @@
                                                 <c:if test="${action.equals('update')}">
                                                     <form action="updateNotifyCp" method="post">
                                                         <input type="hidden" name="notifyId" value="${notifyId}"/>
+                                                        <input type="hidden" name="oldCpId" value="${oldCpId}"/>
+                                                        <input type="hidden" name="page" value="${page}"/>
                                                     </c:if>
                                                     <input type="hidden" name="action" value="${action}"/>
                                                     <div class="row">
@@ -139,7 +141,7 @@
                                                                 <c:forEach var="c" items="${cps}">
                                                                     <option value="${c.cpId}"
                                                                             <c:if test="${c.cpId == cpId}">selected=""</c:if>>
-                                                                        Tên: ${c.cpName} - Mã ${c.cpCode}
+                                                                        Tên: ${c.cpName} - Mã: ${c.cpCode}
                                                                     </option>
                                                                 </c:forEach>
                                                             </select>
@@ -184,24 +186,24 @@
                                                                        <c:if test="${status == 1}">checked=""</c:if>/>&nbsp;Kích Hoạt&nbsp;&nbsp;
                                                                        <input type="radio"  id="basic-default-inactive" name="status" value="0" 
                                                                        <c:if test="${status == 0}">checked=""</c:if>/>&nbsp;Vô Hiệu Hóa
+
                                                                 </div>
+                                                                <div class="mb-3 col-md-6">
+                                                                    <label for="" class="form-label">Ngày Tạo</label>
+                                                                    <p>${createDate}</p>
                                                             </div>
                                                             <div class="mb-3 col-md-6">
-                                                                <label for="" class="form-label">Ngày Tạo</label>
-                                                                <p>${createDate}</p>
-                                                        </div>
-                                                        <div class="mb-3 col-md-6">
-                                                            <label for="" class="form-label">Ngày Cập Nhật</label>
-                                                            <p>
-                                                                <c:if test="${lastUpdate==null}">
-                                                                    None
-                                                                </c:if>
-                                                                <c:if test="${lastUpdate!=null}">
-                                                                    ${lastUpdate}
-                                                                </c:if>
-                                                            </p>
-                                                        </div>
-                                                    </c:if>
+                                                                <label for="" class="form-label">Ngày Cập Nhật</label>
+                                                                <p>
+                                                                    <c:if test="${lastUpdate==null}">
+                                                                        None
+                                                                    </c:if>
+                                                                    <c:if test="${lastUpdate!=null}">
+                                                                        ${lastUpdate}
+                                                                    </c:if>
+                                                                </p>
+                                                            </div>
+                                                        </c:if>
                                                     </div>
                                                     <c:if test="${action.equals('add')}">
 

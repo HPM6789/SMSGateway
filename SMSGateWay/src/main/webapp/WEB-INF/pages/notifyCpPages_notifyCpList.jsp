@@ -156,7 +156,7 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item"
-                                                           href="#"
+                                                           href="updateNotifyCp?notifyId=${n.notifyId}&action=update&page=${page}"
                                                            ><i class="bx bx-edit-alt me-1"></i> Sửa</a
                                                         >
                                                         <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalTop-${n.notifyId}">

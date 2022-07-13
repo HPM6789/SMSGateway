@@ -222,7 +222,6 @@ public class ConfigMtController {
         BigDecimal mtIdDec = new BigDecimal(mtId);
         ConfigMtModel config = configMtDAO.getMtByShortcode(shortcode);
         if(config!=null && !config.getShortcode().equals(oldShortcode)) {
-            model.addAttribute("notice", "Cập nhật thất bại");
             actionLogServices.logAction(userSession.getUserId(), "UPDATE_CONFIG_MT",
                     "CONFIG_MT", mtIdDec.toBigInteger(), "Thất bại", "Thêm Config_MT",
                     null, null, request);

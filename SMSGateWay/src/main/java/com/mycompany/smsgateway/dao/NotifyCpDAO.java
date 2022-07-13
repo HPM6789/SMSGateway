@@ -24,6 +24,8 @@ public interface NotifyCpDAO {
     
     public NotifyCpModel getNotifyCpByCpId(BigDecimal cpId);
     
+    public NotifyCpModel getNotifyCpById(BigDecimal notifyId);
+    
     public BigDecimal getNewestNotifyId();
     
     public Long getTotalNotifyCp();
