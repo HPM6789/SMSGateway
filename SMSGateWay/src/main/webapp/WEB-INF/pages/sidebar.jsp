@@ -152,6 +152,14 @@
                     </a>
                 </li>
             </c:if>
+            <c:if test="${roleUser.contains('NOTIFYCP_LIST')}">
+                <li class="menu-item ">
+                    <a href="notifyCpList?action=list" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                        <div data-i18n="Analytics">Danh Sách Notify CP</div>
+                    </a>
+                </li>
+            </c:if>
             <c:if test="${roleUser.contains('KPIMO')}">
                 <li class="menu-item ">
                     <a href="kpiMoList?action=list" class="menu-link">

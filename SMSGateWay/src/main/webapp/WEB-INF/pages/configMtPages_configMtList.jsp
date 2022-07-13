@@ -108,7 +108,7 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <a href="addConfigMt?action=add" style="color: inherit; text-decoration: none">
-                                        <button class="btn btn-primary me-2">
+                                        <button class="btn btn-primary me-2" style="margin-left: 10px; margin-bottom: 10px">
                                             Thêm Mới Cấu Hình
                                         </button>
                                     </a>

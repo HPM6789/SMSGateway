@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NotifyCp.findAll", query = "SELECT n FROM NotifyCp n"),
     @NamedQuery(name = "NotifyCp.findByNotifyId", query = "SELECT n FROM NotifyCp n WHERE n.notifyId = :notifyId"),
     @NamedQuery(name = "NotifyCp.findByMoReceiveUrl", query = "SELECT n FROM NotifyCp n WHERE n.moReceiveUrl = :moReceiveUrl"),
-    @NamedQuery(name = "NotifyCp.findByCpId", query = "SELECT n FROM NotifyCp n WHERE n.cpId = :cpId"),
+//    @NamedQuery(name = "NotifyCp.findByCpId", query = "SELECT n FROM NotifyCp n WHERE n.cpId = :cpId"),
     @NamedQuery(name = "NotifyCp.findByNote", query = "SELECT n FROM NotifyCp n WHERE n.note = :note"),
     @NamedQuery(name = "NotifyCp.findByCreateDate", query = "SELECT n FROM NotifyCp n WHERE n.createDate = :createDate"),
     @NamedQuery(name = "NotifyCp.findByLastUpdate", query = "SELECT n FROM NotifyCp n WHERE n.lastUpdate = :lastUpdate"),

@@ -47,12 +47,11 @@ public class NotifyCpModel {
         this.cpId = cpId;
     }
 
-    public NotifyCpModel(BigDecimal notifyId, String moReceiveUrl, BigInteger cpId, 
+    public NotifyCpModel(BigDecimal notifyId, String moReceiveUrl, 
             BigDecimal cpIdDec, String cpName, String cpCode, String note, Date createDate, 
             Date lastUpdate, BigInteger status, BigInteger shcodeId, String moReceiveUrlBkp) {
         this.notifyId = notifyId;
         this.moReceiveUrl = moReceiveUrl;
-        this.cpId = cpId;
         this.cpIdDec = cpIdDec;
         this.cpName = cpName;
         this.cpCode = cpCode;
