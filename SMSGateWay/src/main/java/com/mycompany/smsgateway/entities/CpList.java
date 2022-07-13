@@ -110,6 +110,9 @@ public class CpList implements Serializable {
     @OneToMany(mappedBy = "cpInClient")
     private List<ClientTps> clientTps;
     
+    @OneToOne(mappedBy = "cpInNotifyCp")
+    private NotifyCp notifyCp;
+    
     public CpList() {
     }
 
@@ -128,6 +131,14 @@ public class CpList implements Serializable {
 
     public void setClientTps(List<ClientTps> clientTps) {
         this.clientTps = clientTps;
+    }
+
+    public NotifyCp getNotifyCp() {
+        return notifyCp;
+    }
+
+    public void setNotifyCp(NotifyCp notifyCp) {
+        this.notifyCp = notifyCp;
     }
 
     public List<ShortcodeCp> getShortcodeCps() {

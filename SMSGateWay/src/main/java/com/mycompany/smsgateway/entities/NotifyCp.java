@@ -12,8 +12,10 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,10 +55,12 @@ public class NotifyCp implements Serializable {
     @Size(min = 1, max = 500)
     @Column(name = "MO_RECEIVE_URL")
     private String moReceiveUrl;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CP_ID")
-    private BigInteger cpId;
+//    @Basic(optional = false)
+//    @NotNull
+//    @Column(name = "CP_ID")
+    @OneToOne
+    @JoinColumn(name = "CP_ID")
+    private CpList cpInNotifyCp;
     @Size(max = 500)
     @Column(name = "NOTE")
     private String note;
@@ -81,11 +85,11 @@ public class NotifyCp implements Serializable {
         this.notifyId = notifyId;
     }
 
-    public NotifyCp(BigDecimal notifyId, String moReceiveUrl, BigInteger cpId) {
-        this.notifyId = notifyId;
-        this.moReceiveUrl = moReceiveUrl;
-        this.cpId = cpId;
-    }
+//    public NotifyCp(BigDecimal notifyId, String moReceiveUrl, BigInteger cpId) {
+//        this.notifyId = notifyId;
+//        this.moReceiveUrl = moReceiveUrl;
+//        this.cpId = cpId;
+//    }
 
     public BigDecimal getNotifyId() {
         return notifyId;
@@ -103,13 +107,21 @@ public class NotifyCp implements Serializable {
         this.moReceiveUrl = moReceiveUrl;
     }
 
-    public BigInteger getCpId() {
-        return cpId;
+    public CpList getCpInNotifyCp() {
+        return cpInNotifyCp;
     }
 
-    public void setCpId(BigInteger cpId) {
-        this.cpId = cpId;
+    public void setCpInNotifyCp(CpList cpInNotifyCp) {
+        this.cpInNotifyCp = cpInNotifyCp;
     }
+
+//    public BigInteger getCpId() {
+//        return cpId;
+//    }
+//
+//    public void setCpId(BigInteger cpId) {
+//        this.cpId = cpId;
+//    }
 
     public String getNote() {
         return note;
