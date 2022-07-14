@@ -26,7 +26,12 @@
         <title>Danh Sách Đối Tác</title>
 
         <meta name="description" content="" />
+        <!--Bootstrap for select-->
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
         <!-- Favicon -->
         <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/img/favicon/favicon.ico" />
 
@@ -73,41 +78,11 @@
                                     <input type="text" name="inputSearch" placeholder="Tên/Mã Đối Tác"
                                            id="inputSearch" class="form-control" value="${inputSearch}"/>
                                 </div>
-                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
-                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Tạo: </label>
-                                </div>
-                                <div class="mb-3 col-md-3">
-                                    <label class="form-label" for="">Từ </label>
-                                    <input type="date" name="fromCreateDate" style="width: auto; display: inline-block;
-                                           margin-left: 10px;"
-                                           id="fromCreateDate" class="form-control" value="${fromCreateDate}"/>
-                                </div>
-                                <div class="mb-3 col-md-3">
-                                    <label class="form-label" for="">Đến </label>
-                                    <input type="date" name="toCreateDate" style="width: auto; display: inline-block;
-                                           margin-left: 10px;"
-                                           id="toCreateDate" class="form-control" value="${toCreateDate}"/>
-                                </div>
+
                                 <div class="mb-3 col-md-2">
                                     <input type="submit" value="Tìm kiếm" class="btn btn-primary me-2"/>
                                 </div>
-                                <div class="mb-3 col-md-2"></div>
-                                <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
-                                    <label class="form-label" for="" style="padding-left: 50px">Ngày Cập Nhật: </label>
-                                </div>
-                                <div class="mb-3 col-md-3">
-                                    <label class="form-label" for="">Từ </label>
-                                    <input type="date" name="fromUpdateDate" style="width: auto; display: inline-block;
-                                           margin-left: 10px;"
-                                           id="fromUpdateDate" class="form-control" value="${fromUpdateDate}"/>
-                                </div>
-                                <div class="mb-3 col-md-3">
-                                    <label class="form-label" for="">Đến </label>
-                                    <input type="date" name="toUpdateDate" style="width: auto; display: inline-block;
-                                           margin-left: 10px;" 
-                                           pattern=""
-                                           id="toUpdateDate" class="form-control" value="${toUpdateDate}"/>
-                                </div>
+
                                 <div class="mb-3 col-md-2">
                                     <button class="btn btn-secondary" type="button" onclick="resetFormSearch()">Reset</button>
                                 </div>
@@ -159,11 +134,25 @@
                                                 <fmt:formatDate value="${cpLists.get(i-1).createdTime}" pattern="dd/MM/yyyy"/>
                                             </td>
                                             <td>
-                                                <a href="updateShortcodeForCp?cpId=${cpLists.get(i-1).cpId}&page=${page}" style="color: inherit; text-decoration: none">
+<!--                                                <a href="updateShortcodeForCp?cpId=${cpLists.get(i-1).cpId}&page=${page}" style="color: inherit; text-decoration: none">
                                                     <button class="btn btn-primary me-2">
                                                         Cập Nhật Đầu Số
                                                     </button>
-                                                </a>
+                                                </a>-->
+                                                
+                                                <form action="updateShortcodeForCp" method="post">
+                                                    <input type="hidden" name="cpId" value="${cpLists.get(i-1).cpId}"/>
+                                                    <input type="hidden" name="page" value="${page}"/>
+                                                    <select id="" name="shcodeId" multiple class="selectpicker"
+                                                            data-live-search="true" data-actions-box="true">
+                                                        <c:forEach var="sc" items="${shortcodes}">
+                                                            <option <c:if test="${listOfListShcode.get(i-1).contains(sc.shortcode)}">selected=""</c:if> value="${sc.shcodeId}">
+                                                                ${sc.shortcode}
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                                </form>
                                             </td>
                                             <td>${cpLists.get(i-1).representer}</td>
 
@@ -225,29 +214,29 @@
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination">
                                             <li class="page-item first">
-                                                <a class="page-link" href="searchCP?page=1&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
+                                                <a class="page-link" href="searchCP?page=1&inputSearch=${inputSearch}&action=search"
                                                    ><i class="tf-icon bx bx-chevrons-left"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item prev">
-                                                <a class="page-link" href="searchCP?page=${(page==1)?1:(page-1)}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
+                                                <a class="page-link" href="searchCP?page=${(page==1)?1:(page-1)}&inputSearch=${inputSearch}&action=search"
                                                    ><i class="tf-icon bx bx-chevron-left"></i
                                                     ></a>
                                             </li>
                                             <c:forEach var="i" begin="${startDisplayPage}" end="${endDisplayPage}">
                                                 <li class="page-item ${i==page?"active":""}">
-                                                    <a class="page-link" href="searchCP?page=${i}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}">
+                                                    <a class="page-link" href="searchCP?page=${i}&inputSearch=${inputSearch}&action=search">
                                                         ${i}
                                                     </a>
                                                 </li>
                                             </c:forEach>
                                             <li class="page-item next">
-                                                <a class="page-link" href="searchCP?page=${(page==endPage)?endPage:(page+1)}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
+                                                <a class="page-link" href="searchCP?page=${(page==endPage)?endPage:(page+1)}&inputSearch=${inputSearch}&action=search"
                                                    ><i class="tf-icon bx bx-chevron-right"></i
                                                     ></a>
                                             </li>
                                             <li class="page-item last">
-                                                <a class="page-link" href="searchCP?page=${endPage}&inputSearch=${inputSearch}&action=search&fromCreateDate=${fromCreateDate}&toCreateDate=${toCreateDate}&fromUpdateDate=${fromUpdateDate}&toUpdateDate=${toUpdateDate}"
+                                                <a class="page-link" href="searchCP?page=${endPage}&inputSearch=${inputSearch}&action=search"
                                                    ><i class="tf-icon bx bx-chevrons-right"></i
                                                     ></a>
                                             </li>
@@ -296,16 +285,24 @@
             <script>
                 function resetFormSearch() {
                     document.getElementById("inputSearch").value = "";
-                    document.getElementById("fromCreateDate").value = "";
-                    document.getElementById("toCreateDate").value = "";
-                    document.getElementById("fromUpdateDate").value = "";
-                    document.getElementById("toUpdateDate").value = "";
-                };
+                }
+                ;
+                $(document).ready(function () {
+                    $('#selectMemberMultiple').multiselect({
+                        includeSelectAllOption: true,
+                    });
+                });
+                const selects = document.document.querySelectorAll(".selectpicker");
+                for (const select of selects) {
+                    select.multiselect({
+                        includeSelectAllOption: true,
+                    });
+                }
             </script>
-        <style>
-            .dataTables_filter, .dataTables_info {
-                display: none;
-            }
-        </style>
-</body>
+            <style>
+                .dataTables_filter, .dataTables_info {
+                    display: none;
+                }
+            </style>
+    </body>
 </html>

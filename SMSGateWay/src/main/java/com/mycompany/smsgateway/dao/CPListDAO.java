@@ -18,12 +18,13 @@ public interface CPListDAO {
 
     public CpListModel getCPFromUsername(String username);
 
+    public CpListModel getCpListsByCode(String cpCode);
+
     public List<CpListModel> getAllCpList();
 
     public List<CpListModel> getCpListsByName(String name);
 
-    public List<CpListModel> getCpListsByOption(String inputSearch, String fromCreateDate,
-            String toCreateDate, String fromUpdateDate, String toUpdateDate);
+    public List<CpListModel> getCpListsByOption(String inputSearch);
 
     public BigDecimal getNewestCpId();
 

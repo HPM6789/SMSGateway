@@ -80,7 +80,14 @@ public class CPController {
         int end = Math.min(pageInt * numPerPage, totalItem);
         List<CpListModel> cpListPage = paging.cpListPaging(start, end, cpList);
         int[] startEnd = paging.pageRange(pageInt, endPage);
-        System.out.println("start: " + startEnd[0] + ", end: " + startEnd[1]);
+        List<List<String>> listOfListShcode = new ArrayList<>();
+        for (int i = 0; i < numPerPage; i++) {
+            listOfListShcode.add(shortcodeCpDAO.getAllShortcodeByCpId(cpListPage
+            .get(i).getCpId()));
+        }
+        List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcode();
+        model.addAttribute("shortcodes", shortcodes);
+        model.addAttribute("listOfListShcode", listOfListShcode);
         model.addAttribute("cpLists", cpListPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("page", page);
@@ -94,11 +101,7 @@ public class CPController {
 
     @RequestMapping(value = "searchCP", method = RequestMethod.GET)
     public String cpList(Model model, @RequestParam(required = false) String inputSearch, HttpSession session,
-            @RequestParam(required = false) String page, @RequestParam String action,
-            @RequestParam(required = false) String fromCreateDate,
-            @RequestParam(required = false) String toCreateDate,
-            @RequestParam(required = false) String fromUpdateDate,
-            @RequestParam(required = false) String toUpdateDate) {
+            @RequestParam(required = false) String page, @RequestParam String action) {
         AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
         if (userSession == null) {
             return "login";
@@ -113,8 +116,7 @@ public class CPController {
         }
         int pageInt = Integer.parseInt(page);
         int numPerPage = 10;
-        List<CpListModel> cpList = cpListDAO.getCpListsByOption(inputSearch, 
-                fromCreateDate, toCreateDate, fromUpdateDate, toUpdateDate);
+        List<CpListModel> cpList = cpListDAO.getCpListsByOption(inputSearch);
         int totalItem = cpList.size();
         int endPage = totalItem / numPerPage;
         if (totalItem % numPerPage != 0) {
@@ -126,10 +128,6 @@ public class CPController {
         int[] startEnd = paging.pageRange(pageInt, endPage);
         model.addAttribute("cpLists", cpListPage);
         model.addAttribute("inputSearch", inputSearch);
-        model.addAttribute("fromCreateDate", fromCreateDate);
-        model.addAttribute("toCreateDate", toCreateDate);
-        model.addAttribute("fromUpdateDate", fromUpdateDate);
-        model.addAttribute("toUpdateDate", toUpdateDate);
         model.addAttribute("endPage", endPage);
         model.addAttribute("page", page);
         model.addAttribute("startDisplayPage", startEnd[0]);
@@ -367,13 +365,13 @@ public class CPController {
         actionLogServices.logAction(userSession.getUserId(), "UPDATE_SHORTCODE_CP",
                 "CP_LIST", cpIdDec.toBigInteger(), actionResult, "Cập nhật đầu số cho đối tác",
                 null, null, request);
-        List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcode();
-        BigDecimal cpIdDecimal = new BigDecimal(cpId);
-        List<String> shortcodeByCp = shortcodeCpDAO.getAllShortcodeByCpId(cpIdDecimal);
-        model.addAttribute("cpId", cpId);
-        model.addAttribute("shortcodeByCp", shortcodeByCp);
-        model.addAttribute("shortcodes", shortcodes);
-        model.addAttribute("page", page);
-        return "cpPages_updateShortcode";
+//        List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcode();
+//        BigDecimal cpIdDecimal = new BigDecimal(cpId);
+//        List<String> shortcodeByCp = shortcodeCpDAO.getAllShortcodeByCpId(cpIdDecimal);
+//        model.addAttribute("cpId", cpId);
+//        model.addAttribute("shortcodeByCp", shortcodeByCp);
+//        model.addAttribute("shortcodes", shortcodes);
+//        model.addAttribute("page", page);
+        return "redirect:cpPages_cpList?action=list&page=" + page;
     }
 }

@@ -71,6 +71,26 @@ public class CPListDAOImpl implements CPListDAO {
     }
 
     @Override
+    public CpListModel getCpListsByCode(String cpCode) {
+        String sql = "select new " + CpListModel.class.getName()
+                + "(c.cpId, c.cpName, c.cpCode, c.contact, c.createdTime,"
+                + " c.updatedTime, c.usernameMt, c.passwordMt, c.listipMt, c.usernameCharge,"
+                + " c.passwordCharge, c.taxCode, c.representer, c.address, c.emailCp) "
+                + " from " + CpList.class.getName() + " c"
+                + " where upper(c.cpCode) like :cpCode";
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            Query query = session.createQuery(sql);
+            query.setParameter("cpCode", cpCode.toUpperCase());
+            CpListModel cp = (CpListModel) query.uniqueResult();
+            return cp;
+        } catch (Exception ex) {
+            Logger.getLogger(CPListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    @Override
     public List<CpListModel> getAllCpList() {
         String sql = "select new " + CpListModel.class.getName()
                 + "(c.cpId, c.cpName, c.cpCode, c.contact, c.createdTime,"
@@ -112,9 +132,7 @@ public class CPListDAOImpl implements CPListDAO {
     }
 
     @Override
-    public List<CpListModel> getCpListsByOption(String inputSearch,
-            String fromCreateDate, String toCreateDate, String fromUpdateDate, 
-            String toUpdateDate) {
+    public List<CpListModel> getCpListsByOption(String inputSearch) {
         String sql = "select new " + CpListModel.class.getName()
                 + "(c.cpId, c.cpName, c.cpCode, c.contact, c.createdTime,"
                 + " c.updatedTime, c.usernameMt, c.passwordMt, c.listipMt, c.usernameCharge,"
@@ -123,18 +141,6 @@ public class CPListDAOImpl implements CPListDAO {
         if (inputSearch != null && !inputSearch.equals("")) {
             sql += " and (upper(c.cpName) like upper('%" + inputSearch + "%')"
                     + " or upper(c.cpCode) like upper('%" + inputSearch + "%'))";
-        }
-        if (fromCreateDate != null && !fromCreateDate.equals("")) {
-            sql += " and c.createdTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
-        }
-        if (toCreateDate != null && !toCreateDate.equals("")) {
-            sql += " and c.createdTime <= to_date('" + toCreateDate + "','yyyy/MM/dd')";
-        }
-        if (fromUpdateDate != null && !fromUpdateDate.equals("")) {
-            sql += " and c.updatedTime >= to_date('" + fromUpdateDate + "','yyyy/MM/dd')";
-        }
-        if (toUpdateDate != null && !toUpdateDate.equals("")) {
-            sql += " and c.updatedTime <= to_date('" + toUpdateDate + "','yyyy/MM/dd')";
         }
         sql += " order by c.createdTime desc";
         try {
