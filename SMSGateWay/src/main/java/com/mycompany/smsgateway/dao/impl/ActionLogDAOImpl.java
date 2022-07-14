@@ -100,7 +100,8 @@ public class ActionLogDAOImpl implements ActionLogDAO {
                 + " from " + ActionLog.class.getName() + " a "
                 + " left join a.user where 1=1";
         if (inputSearch != null && !inputSearch.equals("")) {
-            sql += " and upper(a.actionlogName) like upper('%" + inputSearch + "%')";
+            sql += " and (upper(a.actionlogName) like upper('%" + inputSearch + "%')"
+                    + " or upper( a.user.userName) like upper('%" + inputSearch + "%'))";
         }
         if (fromCreateDate != null && !fromCreateDate.equals("")) {
             sql += " and a.actionlogTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";
@@ -224,9 +225,10 @@ public class ActionLogDAOImpl implements ActionLogDAO {
             String toCreateDate, String actionResult) {
         String sql = "select count(a)"
                 + " from " + ActionLog.class.getName() + " a "
-                + " where 1=1";
+                + " left join a.user where 1=1";
         if (inputSearch != null && !inputSearch.equals("")) {
-            sql += " and upper(a.actionlogName) like upper('%" + inputSearch + "%')";
+            sql += " and (upper(a.actionlogName) like upper('%" + inputSearch + "%')"
+                    + "or upper( a.user.userName) like upper('%" + inputSearch + "%'))";
         }
         if (fromCreateDate != null && !fromCreateDate.equals("")) {
             sql += " and a.actionlogTime >= to_date('" + fromCreateDate + "','yyyy/MM/dd')";

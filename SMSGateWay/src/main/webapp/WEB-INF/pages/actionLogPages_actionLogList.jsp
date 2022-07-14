@@ -70,7 +70,7 @@
                             <div class="row">
                                 <input type="hidden" name="action" value="search"/>
                                 <div class="mb-3 col-md-2">
-                                    <input type="text" name="inputSearch" placeholder="Tên Log"
+                                    <input type="text" name="inputSearch" placeholder="Log/Người dùng"
                                            id="inputSearch" class="form-control" value="${inputSearch}"/>
                                 </div>
                                 <div class="mb-3 col-md-2" style="padding-top: auto; padding-bottom: ">
@@ -120,7 +120,7 @@
                             <table class="table" id="">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Tên Log</th>
+                                        <th>Log</th>
                                         <th>Người Dùng</th>
                                         <th>Ngày Tạo</th>
                                         <th>Kết Quả</th>
