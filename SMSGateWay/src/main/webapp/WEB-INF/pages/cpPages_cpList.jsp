@@ -113,19 +113,19 @@
                             <table class="table" id="">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>STT</th>
+
                                         <th>Tên</th>
                                         <th>Mã</th>
                                         <th>Ngày Khởi Tạo</th>
-                                        <th>Cập nhật đầu số</th>
                                         <th>Đại Diện</th>
+                                        <th style="text-align: center">Cập nhật đầu số</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
                                     <c:forEach var="i" begin="1" end="${cpLists.size()}">
                                         <tr>
-                                            <td>${i+start}</td>
+
                                             <td>
                                                 ${cpLists.get(i-1).cpName}
                                             </td>
@@ -133,14 +133,9 @@
                                             <td>
                                                 <fmt:formatDate value="${cpLists.get(i-1).createdTime}" pattern="dd/MM/yyyy"/>
                                             </td>
+                                            <td>${cpLists.get(i-1).representer}</td>
                                             <td>
-<!--                                                <a href="updateShortcodeForCp?cpId=${cpLists.get(i-1).cpId}&page=${page}" style="color: inherit; text-decoration: none">
-                                                    <button class="btn btn-primary me-2">
-                                                        Cập Nhật Đầu Số
-                                                    </button>
-                                                </a>-->
-                                                
-                                                <form action="updateShortcodeForCp" method="post">
+                                                <form action="updateShortcodeForCp" method="post" class="formShortcodeCp">
                                                     <input type="hidden" name="cpId" value="${cpLists.get(i-1).cpId}"/>
                                                     <input type="hidden" name="page" value="${page}"/>
                                                     <select id="" name="shcodeId" multiple class="selectpicker"
@@ -151,11 +146,9 @@
                                                             </option>
                                                         </c:forEach>
                                                     </select>
-                                                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                                                    <button type="submit" class="btn btn-primary"">Cập Nhật</button>
                                                 </form>
                                             </td>
-                                            <td>${cpLists.get(i-1).representer}</td>
-
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -278,9 +271,9 @@
             <!-- DataTables -->
             <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
             <script>
-                                        $(document).ready(function () {
-                                            $('#table1').DataTable();
-                                        });
+                                                        $(document).ready(function () {
+                                                            $('#table1').DataTable();
+                                                        });
             </script>
             <script>
                 function resetFormSearch() {

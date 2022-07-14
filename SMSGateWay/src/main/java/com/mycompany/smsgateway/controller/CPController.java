@@ -81,7 +81,7 @@ public class CPController {
         List<CpListModel> cpListPage = paging.cpListPaging(start, end, cpList);
         int[] startEnd = paging.pageRange(pageInt, endPage);
         List<List<String>> listOfListShcode = new ArrayList<>();
-        for (int i = 0; i < numPerPage; i++) {
+        for (int i = 0; i < cpListPage.size(); i++) {
             listOfListShcode.add(shortcodeCpDAO.getAllShortcodeByCpId(cpListPage
             .get(i).getCpId()));
         }
@@ -372,6 +372,6 @@ public class CPController {
 //        model.addAttribute("shortcodeByCp", shortcodeByCp);
 //        model.addAttribute("shortcodes", shortcodes);
 //        model.addAttribute("page", page);
-        return "redirect:cpPages_cpList?action=list&page=" + page;
+        return "redirect:cpList?action=list&page=" + page;
     }
 }
