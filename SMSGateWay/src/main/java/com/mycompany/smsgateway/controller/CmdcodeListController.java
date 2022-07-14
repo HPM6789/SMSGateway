@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CmdcodeListController {
 
-    private int numPerPage = 10;
+    private final int numPerPage = 10;
     
     @Autowired
     private CmdcodeListDAO cmdcodeListDAO;

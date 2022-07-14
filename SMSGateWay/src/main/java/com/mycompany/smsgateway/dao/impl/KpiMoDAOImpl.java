@@ -138,7 +138,7 @@ public class KpiMoDAOImpl implements KpiMoDAO {
             return total;
         } catch (Exception ex) {
             Logger.getLogger(KpiMoDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            return new Long("-1");
         }
     }
 
@@ -163,7 +163,7 @@ public class KpiMoDAOImpl implements KpiMoDAO {
             return total;
         } catch (Exception ex) {
             Logger.getLogger(KpiMoDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            return new Long("-1");
         }
     }
 

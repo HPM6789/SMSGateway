@@ -106,7 +106,7 @@ public class ClientTpsDAOImpl implements ClientTpsDAO {
             return total;
         } catch (Exception ex) {
             Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return new Long("0");
+            return new Long("-1");
         }
     }
 

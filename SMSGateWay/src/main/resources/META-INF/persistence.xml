@@ -36,6 +36,8 @@
     <class>com.mycompany.smsgateway.entities.Categories</class>
     <class>com.mycompany.smsgateway.entities.Posts</class>
     <class>com.mycompany.smsgateway.entities.Users</class>
+    <class>com.mycompany.smsgateway.entities.TblMtLog</class>
+    <class>com.mycompany.smsgateway.entities.SmsMtLog</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.144.13.21:1521:orcl"/>

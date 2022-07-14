@@ -181,11 +181,14 @@
                                         <th>Tên</th>
                                         <th>Mã</th>
                                         <th>Ngày Khởi Tạo</th>
+                                        <th>Trạng Thái</th>
+                                        <th>Người Tạo</th>
                                         <th>
-                                            <span>
                                                 <input class="form-check-input" type="checkbox" style="float: left;height: 20px; width: 20px"
                                                        id="selectAll" name="" autofocus/>
-                                                <div class="dropdown" style="float: right;">
+                                        </th>
+                                        <th>
+                                            <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
@@ -208,12 +211,7 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div class="clear"></div>
-                                            </span>
                                         </th>
-                                        <th>Trạng Thái</th>
-                                        <th>Người Tạo</th>
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
@@ -227,10 +225,6 @@
                                             <td>${c.cmdCode}</td>
                                             <td><fmt:formatDate value="${c.createTime}" pattern="dd/MM/yyyy HH:mm:ss"/></td>
                                             <td>
-                                                <input class="form-check-input cmdIds" type="checkbox" form="selectedForm"
-                                                       id="rolesId" name="cmdIds" value="${c.cmdId}" autofocus/>
-                                            </td>
-                                            <td>
                                                 <c:if test="${c.status==1}">
                                                     Đã Duyệt
                                                 </c:if>
@@ -243,7 +237,10 @@
                                             </td>
 
                                             <td>${c.creatorName}</td>
-
+                                            <td>
+                                                <input class="form-check-input cmdIds" type="checkbox" form="selectedForm"
+                                                       id="rolesId" name="cmdIds" value="${c.cmdId}" autofocus/>
+                                            </td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

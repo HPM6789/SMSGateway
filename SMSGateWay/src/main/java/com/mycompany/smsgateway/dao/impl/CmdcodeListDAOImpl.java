@@ -58,7 +58,6 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
 
     @Override
     public List<CmdcodeListModel> getAllCmdcode2(int start, int next) {
-        System.out.println("getAllCmdcode2: start - " + start + ", next: " + next);
         String sql = "select new " + CmdcodeListModel.class.getName()
                 + "(c.cmdId, c.cmdName, c.cmdCode, c.shortcodeCp.shortcodeCpId, c.updateTime, c.createTime, "
                 + "c.status, c.type.typeCode, c.approveTime, c.price,c.description,"
@@ -214,7 +213,7 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
             return total;
         } catch (Exception ex) {
             Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return new Long("0");
+            return new Long("-1");
         }
     }
 
@@ -233,7 +232,7 @@ public class CmdcodeListDAOImpl implements CmdcodeListDAO {
             return total;
         } catch (Exception ex) {
             Logger.getLogger(CmdcodeListDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return new Long("0");
+            return new Long("-1");
         }
     }
 

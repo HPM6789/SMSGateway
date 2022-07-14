@@ -179,7 +179,7 @@ public class NotifyCpDAOImpl implements NotifyCpDAO {
             return total;
         } catch (Exception ex) {
             Logger.getLogger(NotifyCpDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return new Long("0");
+            return new Long("-1");
         }
     }
 
@@ -205,7 +205,7 @@ public class NotifyCpDAOImpl implements NotifyCpDAO {
             return total;
         } catch (Exception ex) {
             Logger.getLogger(NotifyCpDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return new Long("0");
+            return new Long("-1");
         }
     }
 

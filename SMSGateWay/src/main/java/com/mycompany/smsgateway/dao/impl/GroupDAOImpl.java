@@ -101,7 +101,7 @@ public class GroupDAOImpl implements GroupDAO {
             return groupId;
         } catch (Exception ex) {
             Logger.getLogger(GroupDAOImpl.class.getName()).log(Level.SEVERE, null, ex);
-            return new Long("0");
+            return new Long("-1");
         }
     }
 

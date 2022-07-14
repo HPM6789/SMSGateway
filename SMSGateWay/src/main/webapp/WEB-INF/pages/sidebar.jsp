@@ -177,6 +177,12 @@
                 </li>
             </c:if>
             <li class="menu-item ">
+                    <a href="smsMtLogList?action=list" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                        <div data-i18n="Analytics">Danh Sách SMS MT Log</div>
+                    </a>
+            </li>
+            <li class="menu-item ">
                     <a href="actionLogList?action=list" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-home-circle"></i>
                         <div data-i18n="Analytics">Danh Sách Log</div>
