@@ -34,9 +34,6 @@ public class KpiMoController {
     @Autowired
     private Paging paging;
 
-    @Autowired
-    private ActionLogServices actionLogServices;
-
     @RequestMapping(value = "kpiMoList", method = RequestMethod.GET)
     public String kpiMoList(Model model, HttpSession session, @RequestParam(required = false) String page,
             @RequestParam String action) {
@@ -115,21 +112,4 @@ public class KpiMoController {
         return "kpiPages_kpiMoList";
     }
     
-    @RequestMapping(value = "KpiMoDetail", method = RequestMethod.GET)
-    public String KpiMoDetail(Model model, HttpSession session, @RequestParam String page,
-            @RequestParam String datetime, @RequestParam String shortcode) {
-        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
-        if (userSession == null) {
-            return "login";
-        }
-        List<String> roles = (List<String>) session.getAttribute("roleUser");
-        if (!roles.contains("KPIMO")) {
-            model.addAttribute("message", "This page is protected!");
-            return "accessDeniedPage";
-        }
-        KpiMoModel kpi = kpiMoDAO.getKpiMoByPK(datetime, new BigInteger(shortcode));
-        model.addAttribute("kpi", kpi);
-        model.addAttribute("page", page);
-        return "kpiPages_kpiMoDetail";
-    }
 }

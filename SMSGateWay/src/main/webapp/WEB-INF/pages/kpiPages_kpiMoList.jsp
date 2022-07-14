@@ -117,10 +117,16 @@
                             <table class="table" id="">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>MO Đầu Số</th>
-                                        <th>MO Nhận Từ SMSGW</th>
+                                        <th>Đầu Số</th>
+                                        <th>Nhận Từ SMSGW</th>
                                         <th>Ngày</th>
-                                        <th></th>
+                                        <th>Lỗi không xử lý</th>
+                                        <th>Nằm trong queue</th>
+                                        <th>Đã xử lý</th>
+                                        <th>Đang notify</th>
+                                        <th>Đã notify</th>
+                                        <th>Hoàn cước</th>
+                                        <th>Charge tiền</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
@@ -130,12 +136,13 @@
                                             <td>${k.moReceive}</td>
                                             <td><fmt:parseDate value="${k.datetime}" pattern="yyyyMMdd" var="d"/>
                                                 <fmt:formatDate value="${pageScope.d}" pattern="dd/MM/yyyy"/></td>
-
-                                            <td>
-                                                <a href="KpiMoDetail?datetime=${k.datetime}&shortcode=${k.moShortcode}&page=${page}" style="color: inherit; text-decoration: none">
-                                                    <button type="button" class="btn btn-primary">Chi tiết</button>
-                                                </a>
-                                            </td>
+                                            <td>${k.moError}</td>
+                                            <td>${k.moPending}</td>
+                                            <td>${k.moFinished}</td>
+                                            <td>${k.moNotifyPending}</td>
+                                            <td>${k.moNotifyFinished}</td>
+                                            <td>${k.moRefund}</td>
+                                            <td>${k.moCharge}</td>
                                         </tr>
                                     </c:forEach>
                                 </tbody>
