@@ -133,7 +133,7 @@
                                                             <label for="tps" class="form-label">TPS</label>
                                                             <input
                                                                 class="form-control"
-                                                                type="text"
+                                                                type="number"
                                                                 id="tps"
                                                                 name="tps"
                                                                 value="${tps}"

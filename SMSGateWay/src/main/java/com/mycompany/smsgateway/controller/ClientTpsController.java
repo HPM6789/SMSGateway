@@ -166,7 +166,7 @@ public class ClientTpsController {
         model.addAttribute("clientId", client.getClientId());
         model.addAttribute("tps", client.getTps());
         model.addAttribute("note", client.getNote());
-        model.addAttribute("cpId", client.getCpId());
+        model.addAttribute("cpId", client.getCpIdDec());
         model.addAttribute("shcodeCpId", client.getShcodeId());
         model.addAttribute("action", action);
         return "clientPages_clientTpsDetail";
