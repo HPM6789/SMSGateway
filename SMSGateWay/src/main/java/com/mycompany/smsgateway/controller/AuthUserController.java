@@ -38,6 +38,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AuthUserController {
 
+    private final int numPerPage = 10;
+    
     @Autowired
     private AuthUserDAO authUserDAO;
 
@@ -71,7 +73,6 @@ public class AuthUserController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         List<AuthUserModel> users = authUserDAO.getAllUser();
         int totalItem = users.size();
         int endPage = totalItem / numPerPage;
@@ -110,7 +111,6 @@ public class AuthUserController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         BigInteger statusInt = null;
         BigInteger userTypeInt = null;
         if (status != null && !status.equals("")) {

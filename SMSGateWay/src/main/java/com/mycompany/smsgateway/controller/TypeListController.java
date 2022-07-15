@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TypeListController {
     
+    private final int numPerPage = 10;
+    
     @Autowired
     private TypeListDAO typelistDAO;
     
@@ -46,7 +48,6 @@ public class TypeListController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         Long total = typelistDAO.getTotalTypeList();
         int totalItem = total.intValue();
         int endPage = totalItem / numPerPage;
@@ -82,7 +83,6 @@ public class TypeListController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         Long total = typelistDAO.getTotalTypeListByName(typeName);
         int totalItem = total.intValue();
         int endPage = totalItem / numPerPage;

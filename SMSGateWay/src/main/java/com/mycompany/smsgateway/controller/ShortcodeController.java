@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ShortcodeController {
 
+    private final int numPerPage = 15;
+
     @Autowired
     private ShortcodeListDAO shortcodeListDAO;
 
@@ -54,7 +56,6 @@ public class ShortcodeController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 15;
         List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcode();
         int totalItem = shortcodes.size();
         int endPage = totalItem / numPerPage;
@@ -96,9 +97,8 @@ public class ShortcodeController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 15;
         BigInteger statusInt = null;
-        if (status != null && !status.equals("")){
+        if (status != null && !status.equals("")) {
             statusInt = new BigInteger(status);
         }
         List<ShortcodeListModel> shortcodes = shortcodeListDAO.getAllShortcodeByOption(inputSearch,

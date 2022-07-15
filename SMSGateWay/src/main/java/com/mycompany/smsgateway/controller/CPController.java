@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CPController {
 
+    private final int numPerPage = 10;
+    
     @Autowired
     private CPListDAO cpListDAO;
 
@@ -69,7 +71,6 @@ public class CPController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         List<CpListModel> cpList = cpListDAO.getAllCpList();
         int totalItem = cpList.size();
         int endPage = totalItem / numPerPage;
@@ -115,7 +116,6 @@ public class CPController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         List<CpListModel> cpList = cpListDAO.getCpListsByOption(inputSearch);
         int totalItem = cpList.size();
         int endPage = totalItem / numPerPage;

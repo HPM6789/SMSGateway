@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ClientTpsController {
 
-    private int numPerPage = 10;
+    private final int numPerPage = 10;
 
     @Autowired
     private ClientTpsDAO clientTpsDAO;

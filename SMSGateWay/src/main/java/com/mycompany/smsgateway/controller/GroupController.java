@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class GroupController {
 
+    private final int numPerPage = 10;
+    
     @Autowired
     private GroupDAO groupDAO;
 
@@ -63,7 +65,6 @@ public class GroupController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         List<GroupsModel> groups = groupDAO.getAllGroups();
         int totalItem = groups.size();
         int endPage = totalItem / numPerPage;
@@ -100,7 +101,6 @@ public class GroupController {
             page = "1";
         }
         int pageInt = Integer.parseInt(page);
-        int numPerPage = 10;
         List<GroupsModel> groups = groupDAO.getGroupsByName(groupName);
         int totalItem = groups.size();
         int endPage = totalItem / numPerPage;
