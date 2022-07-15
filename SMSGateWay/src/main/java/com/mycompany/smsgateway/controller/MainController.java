@@ -49,7 +49,11 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/dashboard"}, method = RequestMethod.GET)
-    public String dashboard(Model model) {
+    public String dashboard(Model model, HttpSession session) {
+        AuthUserModel userSession = (AuthUserModel) session.getAttribute("user");
+        if (userSession == null) {
+            return "login";
+        }
         return "dashboard";
     }
 
