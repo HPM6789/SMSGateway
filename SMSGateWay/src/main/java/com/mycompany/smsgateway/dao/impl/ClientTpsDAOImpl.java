@@ -41,7 +41,8 @@ public class ClientTpsDAOImpl implements ClientTpsDAO {
                 + " from " + ClientTps.class.getName() + " c "
                 + " left join c.cpInClient cp"
                 + " left join c.shcodeCpInCLient q"
-                + " left join c.shcodeCpInCLient.shortcode p";
+                + " left join c.shcodeCpInCLient.shortcode p"
+                + " order by c.clientId desc";
         try {
             Session session = sessionFactory.getCurrentSession();
             Query query = session.createQuery(sql);
